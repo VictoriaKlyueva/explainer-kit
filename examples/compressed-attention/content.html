@@ -1,0 +1,189 @@
+<!-- Port of the «Сжатое внимание DeepSeek» page to explainer-kit: the content is unchanged,
+     the chrome (backdrop, TOC, progress) now comes from the kit. -->
+<header class="hero" id="top">
+  <div class="eyebrow"><b>Продолжение «SSM изнутри»</b><span class="dash"></span>Ноябрь 2026<span class="dash"></span>DeepSeek V4 и V4.1</div>
+  <h1>Сжатое внимание<span class="sub">как DeepSeek V4 помнит миллион токенов и чем это отличается от SSM</span></h1>
+  <p class="lead">SSM сворачивает всё прошлое в одну матрицу фиксированного размера. DeepSeek V4 оставляет обычное softmax-внимание и сжимает сам KV-кэш по длине. В слоях CSA каждые 4 токена становятся одной записью, в слоях HCA одной записью становятся 128 токенов. Записей в 4 и в 128 раз меньше, но ни одна из них потом не стирается.</p>
+  <div class="plate">
+    <div class="ph"><h4>Что лежит в памяти слоя</h4><span class="label" id="hero-count">токенов: 0</span></div>
+    <svg class="fig" id="hero" viewBox="0 0 1000 330"></svg>
+    <p class="note">Жёлтые клетки — сжатые записи, яркие из них читает текущий токен. Бирюзовые штрихи — окно из 128 последних токенов без сжатия, оно есть в каждом слое V4. В демо 512 токенов. При миллионе токенов у полного attention 1 048 576 записей на слой, у CSA 262 144, у HCA 8 192, а у SSM по-прежнему одна матрица.</p>
+  </div>
+</header>
+
+<!-- 1 -->
+<section class="sec" id="s1" data-title="Четыре рычага против KV-кэша">
+  <div class="head"><span class="eyebrow"><b>01</b><span class="dash"></span>Откуда берётся память</span><h2>Четыре рычага <em>против KV-кэша</em></h2></div>
+  <div class="prose">
+    <p>Память внимания на один запрос раскладывается на три множителя:</p>
+    <div class="eq"><M>\text{KV}=L\times N(n)\times b</M><div class="cap">L — число слоёв · N(n) — сколько записей держит слой при контексте n · b — размер одной записи</div></div>
+    <p>У обычного attention <m>N(n)=n</m>: одна запись на токен. Уменьшить можно любой множитель, и у DeepSeek каждая версия дёргала свой рычаг.</p>
+  </div>
+  <div class="tablewrap"><table class="t">
+    <tr><th>Рычаг</th><th>Что уменьшает</th><th>Пример</th><th>Записей на слой</th></tr>
+    <tr><td>Ужать запись по ширине</td><td>байты на запись <m>b</m></td><td>MLA в DeepSeek V3: 576 чисел на токен вместо K и V всех голов</td><td><m>n</m></td></tr>
+    <tr><td>Читать не всё</td><td>вычисления, память та же</td><td>DSA в V3.2: индексатор выбирает 2048 токенов для каждого запроса</td><td><m>n</m></td></tr>
+    <tr class="hlrow"><td>Сжать по длине</td><td>число записей <m>N</m></td><td>CSA (÷4) и HCA (÷128) в V4</td><td><m>n/4</m> или <m>n/128</m></td></tr>
+    <tr><td>Заменить записи состоянием</td><td>всё, что растёт с <m>n</m></td><td>SSM, Mamba, Gated DeltaNet</td><td>константа</td></tr>
+  </table></div>
+  <div class="prose">
+    <p>V4 сочетает третий рычаг со вторым: сначала сжимает по длине, потом в части слоёв читает только выбранные записи. SSM — это четвёртый рычаг. Разница в том, что у V4 память всё ещё растёт с длиной контекста, только медленно, а у SSM не растёт совсем.</p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="sec" id="s2" data-title="CSA: 4 токена в одну запись">
+  <div class="head"><span class="eyebrow"><b>02</b><span class="dash"></span>Compressed Sparse Attention</span><h2>Четыре токена <em>в одну запись</em></h2></div>
+  <div class="prose">
+    <p>Возьмём скрытые состояния токенов <m>H</m>. Каждый токен даёт четыре проекции: два варианта своего вклада <m>C^a, C^b</m> и два набора «важностей» <m>Z^a, Z^b</m>. Ветка <m>a</m> пойдёт в запись своего блока, ветка <m>b</m> в запись следующего блока.</p>
+    <div class="eq"><M>C^a=HW^{aKV},\quad C^b=HW^{bKV},\quad Z^a=HW^{aZ},\quad Z^b=HW^{bZ}</M></div>
+    <p>Блок <m>\mathcal B_i</m> — это <m>m=4</m> подряд идущих токена. Запись <m>i</m> собирается из своего блока и предыдущего, то есть из <m>2m=8</m> токенов:</p>
+    <div class="eq"><M>\big[S^a_{\mathcal B_i};\,S^b_{\mathcal B_{i-1}}\big]=\operatorname{softmax}\big(\big[Z^a_{\mathcal B_i}+B^a;\;Z^b_{\mathcal B_{i-1}}+B^b\big]\big)</M><M>C^{\text{Comp}}_i=\sum_{j\in\mathcal B_i}S^a_j\odot C^a_j\;+\sum_{j\in\mathcal B_{i-1}}S^b_j\odot C^b_j</M><div class="cap">softmax идёт по 8 позициям отдельно для каждого из c = 512 каналов · B — обучаемое позиционное смещение · ⊙ — поэлементное умножение</div></div>
+    <p>Это не среднее арифметическое. Модель сама решает, какой токен важен, и решает отдельно для каждого канала: в одном канале запись может почти целиком состоять из подлежащего, в другом из места действия. Перекрытие блоков нужно, чтобы граница блока не резала фразу пополам: каждый токен попадает в две соседние записи.</p>
+  </div>
+  <div class="plate">
+    <div class="ph"><h4>Сборка одной записи</h4><span class="label">игрушечные веса, 3 канала из 512</span></div>
+    <div class="row">
+      <div class="btns" id="cmp-i"><span class="label">запись</span><button class="on" data-i="1">i = 1</button><button data-i="2">i = 2</button><button data-i="3">i = 3</button></div>
+      <div class="btns" id="cmp-mode"><span class="label">веса</span><button class="on" data-m="gate">softmax-гейт, как в V4</button><button data-m="mean">просто среднее</button></div>
+    </div>
+    <svg class="fig" id="cmp" viewBox="0 0 1000 360"></svg>
+    <p class="note" id="cmp-note"></p>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="sec" id="s3" data-title="CSA: индексатор и top-k">
+  <div class="head"><span class="eyebrow"><b>03</b><span class="dash"></span>Lightning indexer</span><h2>Из 262 тысяч записей <em>читаем 512</em></h2></div>
+  <div class="prose">
+    <p>Даже после сжатия в 4 раза на миллионе токенов остаётся 262 144 записи на слой. Поэтому CSA читает не все. Лёгкий индексатор, унаследованный от V3.2, оценивает каждую готовую запись для текущего токена <m>t</m>:</p>
+    <div class="eq"><M>I_{t,s}=\sum_{h=1}^{64} w^I_{t,h}\,\operatorname{ReLU}\!\big(q^I_{t,h}\cdot K^{I}_s\big),\qquad s<\lfloor t/m\rfloor,\qquad \mathcal S_t=\operatorname{top\text{-}k}_s\,I_{t,s}</M><div class="cap">64 головы индексатора по 128 измерений, считается в FP4 · k = 512 у Flash и 1024 у Pro · смотрит только на полностью собранные блоки</div></div>
+    <p>Индексатор проходит по всем записям, но очень дёшево: малая размерность, FP4, ReLU вместо softmax. Настоящее внимание считается только по выбранным <m>k</m> записям плюс окну из 128 последних несжатых токенов. Ключ и значение — один и тот же вектор <m>u</m> размерности 512, так что запись хранится один раз:</p>
+    <div class="eq"><M>\mathcal M_t=\{C^{\text{Comp}}_s\}_{s\in\mathcal S_t}\,\cup\,\{C_{t-127},\dots,C_t\}</M><M>o_{t,h}=\sum_{u\in\mathcal M_t}\frac{\exp(q_{t,h}\cdot u)}{e^{z'_h}+\sum_{u'\in\mathcal M_t}\exp(q_{t,h}\cdot u')}\;u</M><div class="cap">MQA: одна запись u служит и ключом, и значением · z′ — обучаемый «сток» внимания, голова может никуда не смотреть · масштаб 1/√c опущен</div></div>
+    <p>Окно нужно ещё и для причинности: токен не может читать запись своего же недособранного блока, а последние слова обычно самые важные.</p>
+  </div>
+  <div class="plate">
+    <div class="ph"><h4>Что выбирает индексатор</h4><span class="label">2048 токенов → 512 записей</span></div>
+    <div class="row">
+      <div class="btns" id="ix-q"><span class="label">запрос</span><button class="on" data-q="0">про начало текста</button><button data-q="1">про середину</button><button data-q="2">про всё сразу</button></div>
+      <label class="slider">top-k<input type="range" id="ix-k" min="2" max="64" value="16"><output id="ix-k-o"></output></label>
+    </div>
+    <svg class="fig" id="ix" viewBox="0 0 1000 300"></svg>
+    <p class="note" id="ix-note"></p>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="sec" id="s4" data-title="HCA и стопка слоёв">
+  <div class="head"><span class="eyebrow"><b>04</b><span class="dash"></span>Heavily Compressed Attention</span><h2>128 токенов в одну запись <em>и читать всё</em></h2></div>
+  <div class="prose">
+    <p>HCA устроена так же, только блок в 32 раза длиннее и без перекрытия:</p>
+    <div class="eq"><M>S_{\mathcal B'_i}=\operatorname{softmax}\big(Z_{\mathcal B'_i}+B\big),\qquad C^{\text{Comp}}_i=\sum_{j\in\mathcal B'_i}S_j\odot C_j,\qquad |\mathcal B'_i|=m'=128</M></div>
+    <p>Записей так мало, что индексатор не нужен: на миллионе токенов их 8 192, и HCA читает все. Получается два взгляда на прошлое. CSA видит его в мелком масштабе, но выборочно. HCA видит всё целиком, но крупными мазками. Слои чередуются, и в каждом есть окно из 128 последних токенов.</p>
+  </div>
+  <div class="plate">
+    <div class="ph"><h4>Стопка слоёв</h4><span class="label">по compress_ratios из config.json</span></div>
+    <div class="row"><div class="btns" id="ly-m"><span class="label">модель</span><button class="on" data-m="flash">V4-Flash</button><button data-m="pro">V4-Pro</button></div></div>
+    <svg class="fig" id="ly" viewBox="0 0 1000 170"></svg>
+    <p class="note" id="ly-note"></p>
+  </div>
+  <div class="tablewrap"><table class="t num">
+    <tr><th></th><th>V4-Flash</th><th>V4-Pro</th></tr>
+    <tr><td>Параметры, всего / активных</td><td>284B / 13B</td><td>1,6T / 49B</td></tr>
+    <tr><td>Слои</td><td>43: 2 только окно, 21 CSA, 20 HCA</td><td>61: 30 CSA, 31 HCA</td></tr>
+    <tr><td>Сжатие CSA / HCA</td><td>4 / 128</td><td>4 / 128</td></tr>
+    <tr><td>top-k в CSA</td><td>512</td><td>1024</td></tr>
+    <tr><td>Окно без сжатия</td><td>128 токенов</td><td>128 токенов</td></tr>
+    <tr><td>Головы запроса × размер</td><td>64 × 512</td><td>128 × 512</td></tr>
+    <tr><td>Запись KV</td><td colspan="2">одна на K и V, 512 измерений: 448 в FP8 и 64 измерения RoPE в BF16, итого 576 байт</td></tr>
+    <tr><td>Контекст</td><td colspan="2">1M токенов · вышли 24 апреля 2026</td></tr>
+  </table></div>
+</section>
+
+<!-- 5 -->
+<section class="sec" id="s5" data-title="Чем это не SSM">
+  <div class="head"><span class="eyebrow"><b>05</b><span class="dash"></span>Главное сравнение</span><h2>Чем это <em>не SSM</em></h2></div>
+  <div class="prose">
+    <p>Обе идеи сжимают прошлое. Но сжимают по-разному и по-разному читают. Поставим рядом Gated DeltaNet со страницы про SSM и запись памяти V4:</p>
+    <div class="eq"><M>\text{SSM:}\quad S_t=\alpha_t S_{t-1}\big(I-\beta_t k_tk_t^\top\big)+\beta_t v_tk_t^\top,\qquad o_t=S_t\,q_t</M><M>\text{V4:}\quad \mathcal M_t=\big\{C^{\text{Comp}}_0,\dots,C^{\text{Comp}}_{\lfloor t/m\rfloor-1}\big\}\cup\text{window},\qquad o_t=\operatorname{softmax}\text{-read}(q_t,\mathcal M_t)</M></div>
+    <p>У SSM одна матрица на всю историю, и каждый новый токен её переписывает. У V4 список записей, который только растёт: блок сжали один раз, и дальше запись не меняется. Сжатие локальное, смешиваются только соседние токены, а блоки из начала и конца документа друг другу не мешают.</p>
+  </div>
+  <div class="tablewrap"><table class="t">
+    <tr><th></th><th>SSM / Gated DeltaNet</th><th>CSA</th><th>HCA</th></tr>
+    <tr><td>Память слоя при контексте n</td><td>матрица <m>d_k\times d_v</m> на голову, от <m>n</m> не зависит</td><td><m>n/4</m> записей по 576 байт</td><td><m>n/128</m> записей по 576 байт</td></tr>
+    <tr><td>Запись</td><td>каждый токен меняет всю матрицу: затухание <m>\alpha</m> и delta rule</td><td>8 токенов сворачиваются в запись один раз</td><td>128 токенов сворачиваются в запись один раз</td></tr>
+    <tr><td>Чтение</td><td><m>S q</m>, линейно, без выбора</td><td>индексатор → top-k → softmax</td><td>softmax по всем записям</td></tr>
+    <tr><td>Что теряется</td><td>старое вытесняется новым по всей истории</td><td>детали внутри 4 соседних токенов</td><td>детали внутри 128 соседних токенов</td></tr>
+    <tr><td>Шаг генерации</td><td><m>O(1)</m></td><td><m>O(n/4)</m> дешёвый проход индексатора + <m>O(k)</m></td><td><m>O(n/128)</m></td></tr>
+    <tr><td>Точные недавние токены</td><td>в гибридах — отдельные слои полного attention</td><td colspan="2">окно 128 токенов в каждом слое</td></tr>
+  </table></div>
+  <div class="prose">
+    <h3>Почему важен softmax</h3>
+    <p>Если в SSM убрать затухание и delta rule, останется линейное внимание: <m>S q=\sum_i (k_i^\top q)\,v_i</m>. Каждый факт входит в ответ с весом, линейным по сходству ключей, поэтому помехи от всех остальных фактов складываются. Матрица <m>d\times d</m> надёжно хранит порядка <m>d</m> пар «ключ → значение». Softmax по отдельным записям экспоненциально усиливает лучшее совпадение и вытаскивает один факт даже из тысяч. Но для этого записи нужно хранить по отдельности, и V4 их хранит, только в 4 или 128 раз меньше.</p>
+  </div>
+  <div class="plate">
+    <div class="ph"><h4>Игрушечный эксперимент: сколько фактов помнит память</h4><span class="label">случайные ключи и значения, считается в браузере</span></div>
+    <div class="row">
+      <div class="btns" id="rc-d"><span class="label">размер ключа d</span><button class="on" data-d="16">16</button><button data-d="32">32</button></div>
+      <label class="slider">фактов N<input type="range" id="rc-n" min="0" max="13" value="7"><output id="rc-n-o"></output></label>
+    </div>
+    <div class="grid2">
+      <svg class="fig" id="rc" viewBox="0 0 500 330"></svg>
+      <svg class="fig" id="rc-age" viewBox="0 0 500 330"></svg>
+    </div>
+    <div id="rc-legend" class="btns" style="gap:8px 22px"></div>
+    <p class="note">В последовательность пишем N фактов «ключ → значение», потом спрашиваем каждый по его ключу и смотрим, ближе ли ответ к правильному значению, чем к остальным. Состояние SSM здесь матрица d × d, delta rule с β = 0,5. Справа видно, как SSM помнит последние факты и теряет старые, а softmax по записям помнит всё. CSA и HCA читают именно так, только по сжатым записям.</p>
+  </div>
+  <div class="callout">
+    <p><b>Кусочек SSM внутри V4 всё же есть.</b> В разделе про инференс DeepSeek предлагают считать окно и несжатый хвост текущего блока «моделью пространства состояний»: это память фиксированного размера, которая зависит только от текущей позиции. Под неё заранее выделяют пул состояний, отдельно от растущего сжатого кэша.</p>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="sec" id="s6" data-title="Сколько это в гигабайтах">
+  <div class="head"><span class="eyebrow"><b>06</b><span class="dash"></span>Калькулятор</span><h2>Сжатие сдвигает прямую вниз, <em>SSM кладёт её набок</em></h2></div>
+  <div class="plate">
+    <div class="ph"><h4>Память на один запрос</h4><span class="label">лог-лог шкала · все на скелете V4-Flash, 43 слоя</span></div>
+    <div class="row"><label class="slider">контекст<input type="range" id="mem-L" min="0" max="100" value="100"><output id="mem-L-o"></output></label></div>
+    <svg class="fig" id="mem" viewBox="0 0 1000 420"></svg>
+    <div id="mem-legend" class="grid2" style="gap:6px 24px"></div>
+    <div>
+      <div class="label" style="margin-bottom:8px">из чего состоит кэш V4-Flash при выбранном контексте</div>
+      <svg class="fig" id="mem-bar" viewBox="0 0 1000 74"></svg>
+    </div>
+    <p class="note">Оценка V4-Flash: 21 слой CSA × (576 Б + 64 Б ключа индексатора) / 4 + 20 слоёв HCA × 576 Б / 128 ≈ 3,4 КБ на токен, плюс окно 128 токенов во всех 43 слоях ≈ 3 МБ. Сверка с DeepSeek: V4 занимает около 2% от GQA-8 в BF16 (у нас 3,4 / 172 КБ ≈ 2%), а 890 Б у V4.1-Flash — примерно четверть кэша V4-Flash. У V4.1-Flash свой скелет из 40 слоёв, её прямая дана для ориентира. Гибрид и «только Gated DeltaNet» — мысленный эксперимент на том же скелете: состояние 32 головы × 128 × 128 в BF16, 1 МБ на слой.</p>
+  </div>
+  <div class="prose">
+    <p>У полного attention, у V4 и у гибрида прямые параллельны: память растёт линейно с контекстом. Сжатие только опускает прямую. У чистой SSM линия горизонтальная. До контекста примерно в 12 тысяч токенов V4-Flash даже экономнее гипотетической чистой SSM, дальше SSM выигрывает и разрыв растёт.</p>
+    <p>Относительно V3.2 на миллионе токенов DeepSeek называют такие цифры: V4-Pro требует 27% вычислений на токен и 10% KV-кэша, V4-Flash — 10% и 7%. Это результат всей модели целиком, а не только CSA и HCA: изменились и данные, и точность, и остаточные связи.</p>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="sec" id="s7" data-title="Итог и что дальше">
+  <div class="head"><span class="eyebrow"><b>07</b><span class="dash"></span>Итог</span><h2>Сжать кэш <em>или заменить его</em></h2></div>
+  <div class="grid3">
+    <div class="card"><span class="y">сжатое attention · V4</span><h4>Ничего не стирает</h4><p>Память растёт в десятки раз медленнее полного attention. Старые блоки остаются адресуемыми, и softmax может найти один нужный блок из сотен тысяч. Работает на привычных ядрах attention. Минусы: шаг генерации всё равно дорожает с длиной, ведь индексатор проходит все записи, и нужен индексатор, обученный вместе с моделью.</p></div>
+    <div class="card"><span class="y">SSM и линейное attention</span><h4>Фиксированная цена</h4><p>Память и шаг генерации не зависят от длины. Хорошо для очень длинной генерации, стриминга и слабого железа. Минус: ёмкость ограничена размером состояния, точный recall хуже. Поэтому на практике почти всегда гибрид с полным attention в части слоёв.</p></div>
+    <div class="card"><span class="y">осень 2026</span><h4>Границы размываются</h4><p>V4.1-Flash (сентябрь 2026) сжимает дальше: CSA2 переиспользует кэш между слоями, кэш хранится в FP4, итог — 890 байт на токен. Окно из 128 токенов не кладут в постоянный кэш, а при необходимости приближённо восстанавливают, заново прогоняя последние 128 токенов. А Qwen3.8-Flash-Next сочетает Gated DeltaNet с разреженным attention.</p></div>
+  </div>
+  <div class="prose">
+    <p class="kicker">SSM спрашивает, сколько прошлого влезет в одну матрицу. V4 спрашивает, насколько грубо можно хранить каждый кусок прошлого, чтобы его всё ещё можно было найти.</p>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="sec" id="s8" data-title="Источники">
+  <div class="head"><span class="eyebrow"><b>08</b><span class="dash"></span>Что читать</span><h2>Источники</h2></div>
+  <div class="sources">
+    <div><a href="https://arxiv.org/abs/2606.19348" target="_blank" rel="noopener">DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence — технический отчёт</a></div>
+    <div><a href="https://huggingface.co/blog/deepseekv4" target="_blank" rel="noopener">DeepSeek-V4: a million-token context that agents can actually use — блог Hugging Face</a></div>
+    <div><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash" target="_blank" rel="noopener">DeepSeek-V4-Flash — карточка и config.json</a></div>
+    <div><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro" target="_blank" rel="noopener">DeepSeek-V4-Pro — карточка и config.json</a></div>
+    <div><a href="https://arxiv.org/abs/2609.19969" target="_blank" rel="noopener">DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression</a></div>
+    <div><a href="https://sebastianraschka.com/llm-architecture-gallery/csa-hca/" target="_blank" rel="noopener">CSA и HCA — галерея архитектур Себастьяна Рашки</a></div>
+    <div><a href="https://www.theneuron.ai/explainer-articles/deepseek-v41-flash-explained-how-it-cuts-ai-memory-8x/" target="_blank" rel="noopener">DeepSeek V4.1 Flash explained — The Neuron</a></div>
+    <div><a href="https://arxiv.org/pdf/2412.06464" target="_blank" rel="noopener">Gated DeltaNet — Yang, Kautz, Hatamizadeh, 2024</a></div>
+    <div><a href="https://claude.ai/artifact/QjvfuW7FP3BBVNpDgF6hzP" target="_blank" rel="noopener">SSM изнутри — предыдущая страница</a></div>
+  </div>
+</section>

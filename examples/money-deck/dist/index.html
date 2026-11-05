@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Как растут деньги · слайды</title>
+<meta name="description" content="Шаблон слайдов explainer-kit: титул, план, тезисы по клику, живой виджет, схема по шагам, большая цифра, таблица, цитата, итог.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Theme «abyss»: deep water. Bone-white text on near-black teal, lamp-yellow accent,
+   bioluminescent teal for controls, coral for warnings. Classical display serif (Cormorant)
+   with italic accents, humanist sans for reading (Golos Text), JetBrains Mono for data.
+   Single dark look by design. */
+:root {
+  --bg: #050d12;
+  --surface: rgba(7, 21, 28, 0.72);
+  --surface-2: rgba(11, 29, 37, 0.94);
+  --ink: #ece6d7;
+  --ink-2: rgba(236, 230, 215, 0.82);
+  --muted: #93adae;
+  --line: rgba(150, 182, 184, 0.2);
+  --line-2: rgba(150, 182, 184, 0.45);
+  --accent: #f1c46c;
+  --accent-ink: #1b1407;
+  --accent-2: #72d8c6;
+  --warn: #e8866c;
+  --extra: #c4b5e8;
+  --f-display: "Cormorant", "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --f-body: "Golos Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --display-weight: 500; --display-tracking: -0.005em; --em-style: italic; --display-scale: 1;
+  --radius: 2px; --blur: 6px; --icon-stroke: 1.6; --icon-cap: round;
+  --shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+  --ray: rgba(190, 235, 235, 0.3); --vignette: rgba(2, 8, 12, 0.6);
+  color-scheme: dark;
+}
+
+/* explainer-kit · base.css
+   Components shared by the page and deck formats. Every color comes from theme tokens
+   (see reference/themes.md); never write a literal color here. Type sizes come from
+   --fs-* variables that page.css and deck.css set differently. */
+
+:root {
+  /* derived tokens: recomputed automatically when a theme block redefines the base ones */
+  --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+  --accent-2-soft: color-mix(in srgb, var(--accent-2) 12%, transparent);
+  --warn-soft: color-mix(in srgb, var(--warn) 15%, transparent);
+  --extra-soft: color-mix(in srgb, var(--extra) 15%, transparent);
+  --scrim: color-mix(in srgb, var(--bg) 88%, transparent);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: var(--fs-body); line-height: 1.6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+p { margin: 0; }
+a { color: var(--accent-2); text-underline-offset: 0.15em; }
+b, strong { font-weight: 600; color: var(--ink); }
+img { max-width: 100%; }
+
+/* ---------- type ---------- */
+.eyebrow { font-family: var(--f-mono); font-size: var(--fs-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.eyebrow b { color: var(--accent); font-weight: 500; }
+.eyebrow .dash { width: 34px; height: 1px; background: var(--line-2); }
+h1, h2, h3, h4 { font-family: var(--f-display); font-weight: var(--display-weight, 500); margin: 0; text-wrap: balance; letter-spacing: var(--display-tracking, -0.005em); line-height: 1.05; }
+h1 { font-size: calc(var(--fs-h1) * var(--display-scale, 1)); line-height: 0.98; }
+h1 .sub { display: block; font-style: var(--em-style, italic); color: var(--accent); font-size: 0.5em; line-height: 1.15; margin-top: 16px; }
+h2 { font-size: calc(var(--fs-h2) * var(--display-scale, 1)); line-height: 1.04; }
+h3 { font-size: calc(var(--fs-h3) * var(--display-scale, 1)); line-height: 1.15; }
+h4 { font-size: var(--fs-h4); font-weight: 600; line-height: 1.15; }
+h1 em, h2 em, h3 em, h4 em { font-style: var(--em-style, italic); color: var(--accent); font-weight: inherit; }
+.lead { font-size: var(--fs-lead); line-height: 1.5; color: var(--ink-2); max-width: 760px; }
+.prose { max-width: 760px; display: flex; flex-direction: column; gap: 18px; }
+.prose p, .prose li { color: var(--ink-2); }
+.small { font-size: var(--fs-small); line-height: 1.5; color: var(--muted); }
+.mono { font-family: var(--f-mono); }
+.label { font-family: var(--f-mono); font-size: var(--fs-label); letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); }
+.kicker { font-family: var(--f-display); font-style: var(--em-style, italic); font-size: var(--fs-kicker); line-height: 1.3; color: var(--ink); }
+.num { font-variant-numeric: tabular-nums; }
+.nowrap { white-space: nowrap; }
+.hl, .a1 { color: var(--accent); } .a2 { color: var(--accent-2); } .warn { color: var(--warn); } .extra { color: var(--extra); } .muted { color: var(--muted); }
+.card.warn, .callout.warn { color: inherit; } /* .warn on a card or callout is a variant, not a text color */
+ul.ticks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+ul.ticks li { position: relative; padding-left: 26px; color: var(--ink-2); }
+ul.ticks li::before { content: ""; position: absolute; left: 2px; top: 0.8em; width: 12px; height: 1px; background: var(--accent); }
+kbd { font-family: var(--f-mono); font-size: 0.8em; border: 1px solid var(--line-2); padding: 1px 6px; border-radius: var(--radius); color: var(--accent); }
+
+/* ---------- math (pre-rendered by build.mjs into SVG) ---------- */
+mjx-container[display="true"] { display: block; margin: 6px 0; overflow-x: auto; overflow-y: hidden; padding: 6px 2px; text-align: center; }
+mjx-container[display="true"] svg { max-width: none; }
+mjx-container:not([display]) { display: inline-block; }
+mjx-container svg { color: inherit; }
+.eq { background: color-mix(in srgb, var(--bg) 55%, transparent); border-left: 2px solid var(--accent); padding: 6px 18px; max-width: 760px; }
+.eq .cap { font-family: var(--f-mono); font-size: calc(var(--fs-label) * 1.02); letter-spacing: 0.02em; color: var(--muted); padding-top: 4px; }
+
+/* ---------- plate: one interactive figure ---------- */
+.plate { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px 18px; display: flex; flex-direction: column; gap: 14px; backdrop-filter: blur(var(--blur, 0px)); -webkit-backdrop-filter: blur(var(--blur, 0px)); min-width: 0; }
+.plate .ph { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+.plate .ph h4 { font-size: var(--fs-h4); }
+.plate .ph .label { white-space: nowrap; }
+.plate .row { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+.plate .note { font-size: var(--fs-small); color: var(--muted); line-height: 1.5; }
+svg.fig { width: 100%; height: auto; display: block; overflow: visible; }
+svg text { font-family: var(--f-mono); }
+.figscroll, .scrollx { overflow-x: auto; overflow-y: hidden; }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+
+/* ---------- controls ---------- */
+button, .chip { font-family: var(--f-mono); font-size: var(--fs-ui); color: var(--ink); background: var(--accent-2-soft); border: 1px solid color-mix(in srgb, var(--accent-2) 45%, transparent); padding: 8px 13px; border-radius: var(--radius); cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s; line-height: 1.2; }
+button:hover, .chip:hover { background: color-mix(in srgb, var(--accent-2) 22%, transparent); }
+button:focus-visible, .chip:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button.on, .chip.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.btns { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btns .label { margin-right: 4px; }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; background: transparent; cursor: pointer; margin: 0; }
+input[type=range]::-webkit-slider-runnable-track { height: 2px; background: var(--line-2); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); margin-top: -7px; border: 2px solid var(--accent-ink); }
+input[type=range]::-moz-range-track { height: 2px; background: var(--line-2); }
+input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--accent); border: 2px solid var(--accent-ink); }
+.slider { display: grid; grid-template-columns: minmax(90px, auto) minmax(120px, 1fr) 72px; gap: 12px; align-items: center; font-family: var(--f-mono); font-size: var(--fs-ui); color: var(--muted); min-width: min(100%, 340px); flex: 1 1 320px; }
+.slider output { color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- tables ---------- */
+.tablewrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+table.t { border-collapse: collapse; width: 100%; font-size: calc(var(--fs-body) * 0.86); }
+table.t th { text-align: left; font-family: var(--f-mono); font-size: calc(var(--fs-label) * 0.96); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; padding: 8px 12px; border-bottom: 1px solid var(--line-2); }
+table.t td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--ink-2); }
+table.t td:first-child { color: var(--ink); white-space: nowrap; }
+table.t tr.hlrow td { background: var(--accent-soft); }
+
+/* ---------- cards, callouts, sources ---------- */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.card .y, .card .tag { font-family: var(--f-mono); font-size: var(--fs-label); color: var(--accent); letter-spacing: 0.04em; }
+.card h4 { font-size: calc(var(--fs-h4) * 0.96); }
+.card p { font-size: calc(var(--fs-body) * 0.86); line-height: 1.5; color: var(--ink-2); }
+.card .big { font-family: var(--f-display); font-size: calc(var(--fs-h2) * 0.95); line-height: 0.95; color: var(--accent); font-weight: 600; }
+.card.warn { border-color: color-mix(in srgb, var(--warn) 55%, transparent); }
+.card.warn .y, .card.warn .tag { color: var(--warn); }
+.callout { border: 1px solid var(--accent); background: var(--accent-soft); border-radius: var(--radius); padding: 16px 20px; max-width: 760px; }
+.callout.warn { border-color: var(--warn); background: var(--warn-soft); }
+.flag { font-family: var(--f-mono); font-size: 11px; color: var(--warn); border: 1px solid color-mix(in srgb, var(--warn) 50%, transparent); padding: 1px 6px; white-space: nowrap; border-radius: var(--radius); }
+.sources { columns: 2; column-gap: 40px; font-size: var(--fs-small); line-height: 1.55; color: var(--muted); }
+.sources div { break-inside: avoid; margin-bottom: 6px; }
+.sources a { color: var(--ink-2); text-decoration: none; border-bottom: 1px solid var(--line); }
+
+/* ---------- images: exhibits open in a lightbox, photos are never cropped ---------- */
+.exhibit { margin: 0; cursor: zoom-in; display: block; }
+.exhibit .frame, .photo .frame { background: var(--surface-2); border: 1px solid var(--line-2); padding: 7px; box-shadow: var(--shadow, none); border-radius: var(--radius); }
+.exhibit img, .photo img { display: block; width: 100%; height: auto; }
+.exhibit:hover .frame { border-color: var(--accent); }
+.exhibit figcaption, .photo figcaption { font-family: var(--f-mono); font-size: var(--fs-label); letter-spacing: 0.06em; color: var(--muted); margin-top: 8px; }
+.photo { margin: 0; }
+#lightbox { position: fixed; inset: 0; z-index: 70; background: var(--scrim); display: flex; align-items: center; justify-content: center; padding: 24px; }
+#lightbox img { max-width: 92vw; max-height: 88vh; border: 1px solid var(--line-2); background: var(--surface-2); padding: 10px; cursor: zoom-out; }
+
+/* ---------- ambient backdrop (built by ambient.js) ---------- */
+#ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+#ambient > * { position: absolute; inset: 0; }
+#ambient canvas { width: 100%; height: 100%; }
+#ambient .amb-rays { inset: -10% -10% 30% -10%; mix-blend-mode: screen; filter: blur(14px); }
+#ambient .amb-rays i { position: absolute; top: -20%; width: 9%; height: 140%; background: linear-gradient(180deg, var(--ray, rgba(190, 235, 235, 0.3)), transparent 78%); transform-origin: top center; transform: rotate(var(--r)); }
+#ambient .amb-rays.sway i { animation: amb-sway 14s ease-in-out infinite alternate; }
+@keyframes amb-sway { from { transform: rotate(calc(var(--r) - 3deg)); } to { transform: rotate(calc(var(--r) + 3deg)); } }
+#ambient .amb-vignette { background: radial-gradient(120% 90% at 50% 40%, transparent 40%, var(--vignette, rgba(0, 0, 0, 0.55)) 100%); }
+#ambient .amb-grain { inset: -50%; opacity: var(--grain, 0.06); background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+#ambient .amb-grid { background-image: linear-gradient(var(--grid-major) 1px, transparent 1px), linear-gradient(90deg, var(--grid-major) 1px, transparent 1px), linear-gradient(var(--grid-minor) 1px, transparent 1px), linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px); background-size: calc(var(--grid-cell, 28px) * 4) calc(var(--grid-cell, 28px) * 4), calc(var(--grid-cell, 28px) * 4) calc(var(--grid-cell, 28px) * 4), var(--grid-cell, 28px) var(--grid-cell, 28px), var(--grid-cell, 28px) var(--grid-cell, 28px); background-position: -1px -1px; }
+body.ambient-off #ambient .amb-fx { display: none; }
+
+@media (prefers-reduced-motion: reduce) { #ambient .amb-rays.sway i { animation: none; } html { scroll-behavior: auto !important; } }
+
+/* explainer-kit · deck.css — slides format.
+   A fixed 1600×900 stage scaled to the window; every slide is laid out in stage pixels,
+   so sizes below are absolute. Elements with data-f="n" appear on the n-th click. */
+
+html, body { height: 100%; }
+body { overflow: hidden; }
+#stage {
+  --fs-body: 20px; --fs-lead: 25px; --fs-small: 16px; --fs-label: 14px; --fs-ui: 14px;
+  --fs-h1: 112px; --fs-h2: 60px; --fs-h3: 30px; --fs-h4: 26px; --fs-kicker: 30px;
+  position: fixed; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: 50% 50%; z-index: 10;
+  font-size: var(--fs-body);
+}
+.slide { position: absolute; inset: 0; padding: 54px 96px 96px; display: flex; flex-direction: column; gap: 20px; opacity: 0; visibility: hidden; transition: opacity 0.45s ease, visibility 0s linear 0.45s; }
+.slide.active { opacity: 1; visibility: visible; transition: opacity 0.45s ease; }
+.slide > * { min-width: 0; }
+.slide h2 { font-size: calc(var(--fs-h2) * var(--display-scale, 1)); }
+.slide .lead { max-width: 62ch; }
+.slide .prose, .slide .eq { max-width: none; }
+.notes { display: none !important; }
+[data-f] { opacity: 0; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease; }
+[data-f].on { opacity: 1; transform: none; }
+
+/* layout helpers in stage pixels */
+.row { display: flex; gap: 32px; min-height: 0; }
+.col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.grow { flex: 1 1 0; min-width: 0; }
+.fill { flex: 1 1 auto; min-height: 0; }
+.center { align-items: center; }
+.push { margin-top: auto; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 24px; backdrop-filter: blur(var(--blur, 0px)); -webkit-backdrop-filter: blur(var(--blur, 0px)); }
+.slide ul.ticks li { font-size: 21px; line-height: 1.42; }
+.slide .card p { font-size: 18px; }
+.slide .card h4 { font-size: 28px; }
+.slide table.t { font-size: 18px; }
+.slide .plate .note { font-size: 16px; }
+
+/* slide types */
+.s-title { justify-content: center; }
+.s-title h1 { font-size: calc(var(--fs-h1) * var(--display-scale, 1)); line-height: 0.95; }
+.s-title h1 .sub { font-size: 0.45em; max-width: 15.5em; margin-top: 22px; }
+.s-center { justify-content: center; align-items: center; text-align: center; }
+.s-center .lead { margin-inline: auto; }
+.s-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto 1fr; column-gap: 56px; row-gap: 18px; }
+.s-split > .eyebrow, .s-split > h2 { grid-column: 1 / -1; }
+.s-split > * { align-self: start; }
+.s-big .big { font-family: var(--f-display); font-size: 220px; line-height: 0.9; color: var(--accent); font-weight: 600; letter-spacing: -0.02em; }
+.s-quote blockquote { margin: 0; font-family: var(--f-display); font-style: var(--em-style, italic); font-size: 58px; line-height: 1.15; max-width: 22em; color: var(--ink); text-wrap: balance; }
+.s-quote cite { font-family: var(--f-mono); font-style: normal; font-size: 15px; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; }
+.thesis { font-family: var(--f-display); font-size: 36px; line-height: 1.18; color: var(--ink); text-wrap: balance; }
+.thesis em { color: var(--accent); font-style: var(--em-style, italic); }
+
+/* bottom bar inside the stage */
+#bar { position: absolute; left: 96px; right: 96px; bottom: 26px; height: 40px; display: flex; align-items: center; gap: 22px; z-index: 20; font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+#bar .who { white-space: nowrap; }
+#bar .prog { flex: 1; position: relative; height: 22px; }
+#bar .prog .track { position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--line); }
+#bar .prog .done { position: absolute; left: 0; top: 50%; height: 1px; background: var(--accent); transition: width 0.5s ease; }
+#bar .prog .ch { position: absolute; top: 3px; width: 1px; height: 16px; background: var(--line-2); }
+#bar .prog .ch span { position: absolute; top: -16px; left: 4px; font-size: 9.5px; white-space: nowrap; color: var(--muted); opacity: 0.75; }
+#bar .prog .ch.on span { color: var(--accent); opacity: 1; }
+#bar .count { font-variant-numeric: tabular-nums; color: var(--ink); white-space: nowrap; }
+#bar button { padding: 6px 12px; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
+#bar button svg { width: 16px; height: 16px; }
+
+#notes { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 95%, transparent); border-top: 1px solid var(--line-2); padding: 16px max(24px, env(safe-area-inset-left, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)); font-size: 18px; line-height: 1.5; color: var(--ink); max-height: 34vh; overflow: auto; }
+#notes .label { margin-bottom: 6px; display: block; }
+#help { position: fixed; inset: 0; z-index: 60; background: var(--scrim); display: flex; align-items: center; justify-content: center; padding: 24px; }
+#help .panel { max-width: 600px; font-size: 17px; line-height: 1.9; color: var(--ink); }
+#help kbd { margin-right: 6px; }
+
+@media (prefers-reduced-motion: reduce) { .slide, [data-f] { transition: none; } }
+
+/* explainer-kit · draw.css — drawing layer, its toolbar and the pen button */
+#ink { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 40; pointer-events: none; }
+#stage #ink { position: absolute; inset: 0; width: 1600px; height: 900px; z-index: 15; }
+body.inking #ink { pointer-events: auto; touch-action: none; cursor: crosshair; }
+body.inking.ink-eraser #ink { cursor: cell; }
+.ink-fab { position: fixed; right: calc(18px + env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 45; width: 48px; height: 48px; padding: 0; border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: color-mix(in srgb, var(--bg) 88%, var(--ink) 12%); border: 1px solid var(--line-2); box-shadow: 0 8px 24px color-mix(in srgb, var(--bg) 60%, transparent); }
+.ink-fab:hover { color: var(--accent); border-color: var(--accent); background: color-mix(in srgb, var(--bg) 82%, var(--accent) 18%); }
+.ink-fab.on, #b-ink.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.ink-bar { position: fixed; top: calc(12px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); z-index: 46; display: flex; gap: 4px; align-items: center; padding: 6px 8px; max-width: calc(100vw - 24px); overflow-x: auto; background: color-mix(in srgb, var(--bg) 90%, var(--ink) 10%); border: 1px solid var(--line-2); border-radius: calc(var(--radius) + 8px); box-shadow: 0 10px 30px color-mix(in srgb, var(--bg) 55%, transparent); }
+.ink-bar button { flex: none; padding: 7px; display: grid; place-items: center; color: var(--ink-2); background: transparent; border: 1px solid transparent; border-radius: calc(var(--radius) + 4px); }
+.ink-bar button:hover { color: var(--ink); background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.ink-bar button.on { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 60%, transparent); }
+.ink-bar .sep { flex: none; width: 1px; height: 22px; background: var(--line-2); margin: 0 3px; }
+.ink-bar .sw { width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--bg) 70%, transparent); }
+.ink-bar .sw.on { border-color: var(--ink); background-clip: padding-box; box-shadow: 0 0 0 2px var(--bg) inset; }
+.ink-bar .sz { width: 32px; height: 32px; }
+.ink-bar .sz i { display: block; border-radius: 50%; background: currentColor; }
+@media print { #ink, .ink-fab, .ink-bar { display: none !important; } }
+
+/* content */
+/* Styles for this page only. Use theme tokens (var(--accent), var(--line)…), never literal colors,
+   so the page keeps working when the theme changes. */
+
+</style>
+</head>
+<body>
+<svg style="display:none" aria-hidden="true"><defs><path id="MJX-TEX-I-1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z"></path><path id="MJX-TEX-I-1D45B" d="M21 287Q22 293 24 303T36 341T56 388T89 425T135 442Q171 442 195 424T225 390T231 369Q231 367 232 367L243 378Q304 442 382 442Q436 442 469 415T503 336T465 179T427 52Q427 26 444 26Q450 26 453 27Q482 32 505 65T540 145Q542 153 560 153Q580 153 580 145Q580 144 576 130Q568 101 554 73T508 17T439 -10Q392 -10 371 17T350 73Q350 92 386 193T423 345Q423 404 379 404H374Q288 404 229 303L222 291L189 157Q156 26 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 112 180T152 343Q153 348 153 366Q153 405 129 405Q91 405 66 305Q60 285 60 284Q58 278 41 278H27Q21 284 21 287Z"></path><path id="MJX-TEX-N-3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path><path id="MJX-TEX-I-1D443" d="M287 628Q287 635 230 637Q206 637 199 638T192 648Q192 649 194 659Q200 679 203 681T397 683Q587 682 600 680Q664 669 707 631T751 530Q751 453 685 389Q616 321 507 303Q500 302 402 301H307L277 182Q247 66 247 59Q247 55 248 54T255 50T272 48T305 46H336Q342 37 342 35Q342 19 335 5Q330 0 319 0Q316 0 282 1T182 2Q120 2 87 2T51 1Q33 1 33 11Q33 13 36 25Q40 41 44 43T67 46Q94 46 127 49Q141 52 146 61Q149 65 218 339T287 628ZM645 554Q645 567 643 575T634 597T609 619T560 635Q553 636 480 637Q463 637 445 637T416 636T404 636Q391 635 386 627Q384 621 367 550T332 412T314 344Q314 342 395 342H407H430Q542 342 590 392Q617 419 631 471T645 554Z"></path><path id="MJX-TEX-N-28" d="M94 250Q94 319 104 381T127 488T164 576T202 643T244 695T277 729T302 750H315H319Q333 750 333 741Q333 738 316 720T275 667T226 581T184 443T167 250T184 58T225 -81T274 -167T316 -220T333 -241Q333 -250 318 -250H315H302L274 -226Q180 -141 137 -14T94 250Z"></path><path id="MJX-TEX-N-31" d="M213 578L200 573Q186 568 160 563T102 556H83V602H102Q149 604 189 617T245 641T273 663Q275 666 285 666Q294 666 302 660V361L303 61Q310 54 315 52T339 48T401 46H427V0H416Q395 3 257 3Q121 3 100 0H88V46H114Q136 46 152 46T177 47T193 50T201 52T207 57T213 61V578Z"></path><path id="MJX-TEX-N-2B" d="M56 237T56 250T70 270H369V420L370 570Q380 583 389 583Q402 583 409 568V270H707Q722 262 722 250T707 230H409V-68Q401 -82 391 -82H389H387Q375 -82 369 -68V230H70Q56 237 56 250Z"></path><path id="MJX-TEX-I-1D45F" d="M21 287Q22 290 23 295T28 317T38 348T53 381T73 411T99 433T132 442Q161 442 183 430T214 408T225 388Q227 382 228 382T236 389Q284 441 347 441H350Q398 441 422 400Q430 381 430 363Q430 333 417 315T391 292T366 288Q346 288 334 299T322 328Q322 376 378 392Q356 405 342 405Q286 405 239 331Q229 315 224 298T190 165Q156 25 151 16Q138 -11 108 -11Q95 -11 87 -5T76 7T74 17Q74 30 114 189T154 366Q154 405 128 405Q107 405 92 377T68 316T57 280Q55 278 41 278H27Q21 284 21 287Z"></path><path id="MJX-TEX-N-29" d="M60 749L64 750Q69 750 74 750H86L114 726Q208 641 251 514T294 250Q294 182 284 119T261 12T224 -76T186 -143T145 -194T113 -227T90 -246Q87 -249 86 -250H74Q66 -250 63 -250T58 -247T55 -238Q56 -237 66 -225Q221 -64 221 250T66 725Q56 737 55 738Q55 746 60 749Z"></path><path id="MJX-TEX-N-76" d="M338 431Q344 429 422 429Q479 429 503 431H508V385H497Q439 381 423 345Q421 341 356 172T288 -2Q283 -11 263 -11Q244 -11 239 -2Q99 359 98 364Q93 378 82 381T43 385H19V431H25L33 430Q41 430 53 430T79 430T104 429T122 428Q217 428 232 431H240V385H226Q187 384 184 370Q184 366 235 234L286 102L377 341V349Q377 363 367 372T349 383T335 385H331V431H338Z"></path><path id="MJX-TEX-N-73" d="M295 316Q295 356 268 385T190 414Q154 414 128 401Q98 382 98 349Q97 344 98 336T114 312T157 287Q175 282 201 278T245 269T277 256Q294 248 310 236T342 195T359 133Q359 71 321 31T198 -10H190Q138 -10 94 26L86 19L77 10Q71 4 65 -1L54 -11H46H42Q39 -11 33 -5V74V132Q33 153 35 157T45 162H54Q66 162 70 158T75 146T82 119T101 77Q136 26 198 26Q295 26 295 104Q295 133 277 151Q257 175 194 187T111 210Q75 227 54 256T33 318Q33 357 50 384T93 424T143 442T187 447H198Q238 447 268 432L283 424L292 431Q302 440 314 448H322H326Q329 448 335 442V310L329 304H301Q295 310 295 316Z"></path></defs></svg>
+<main id="stage" aria-live="polite">
+<!-- Slides template. One <section class="slide"> per slide, laid out in 1600×900 stage pixels.
+     data-ch — chapter for the progress bar (labels in config.json → chapters).
+     data-f="n" — appears on click n. <aside class="notes"> — speaker notes (N key).
+     Slide types: s-title, s-center, s-split, s-big, s-quote; or no type for a free layout. -->
+
+<section class="slide s-title" data-ch="0">
+  <div class="eyebrow"><b>Шаблон</b><span class="dash"></span>Слайды</div>
+  <h1>Как растут <em>деньги</em><span class="sub">и почему через тридцать лет важнее процент, а не сумма взноса</span></h1>
+  <p class="small mono push">→ / пробел — дальше · N — заметки · D — рисовать · ? — все клавиши</p>
+  <aside class="notes">Титул: тема, подзаголовок-тезис, подсказка по клавишам. Заметки видит только докладчик по клавише N.</aside>
+</section>
+
+<section class="slide" id="s-plan" data-ch="0">
+  <div class="eyebrow"><b>План</b></div>
+  <h2>Три вопроса <em>на десять минут</em></h2>
+  <div class="grid3" style="margin-top:40px">
+    <div class="card" data-go="s-formula" tabindex="0"><span class="tag">01</span><h4>Почему кривая загибается</h4><p>Формула и правило 72.</p></div>
+    <div class="card" data-go="s-calc" tabindex="0"><span class="tag">02</span><h4>Что важнее</h4><p>Ставка или сумма взноса.</p></div>
+    <div class="card" data-go="s-end" tabindex="0"><span class="tag">03</span><h4>Что делать</h4><p>Три вывода.</p></div>
+  </div>
+  <p class="small push">Карточки с data-go — ссылки на слайды: по клику переходим сразу туда.</p>
+  <aside class="notes">Весь доклад на одном слайде.</aside>
+</section>
+
+<section class="slide" id="s-formula" data-ch="1">
+  <div class="eyebrow"><b>01</b><span class="dash"></span>Формула</div>
+  <h2>Деньги растут <em>по степени</em></h2>
+  <div class="eq" style="margin-top:24px"><mjx-container class="MathJax" jax="SVG" display="true"><svg style="vertical-align: -0.566ex;" xmlns="http://www.w3.org/2000/svg" width="43.251ex" height="2.262ex" role="img" focusable="false" viewBox="0 -750 19116.8 1000" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msub"><g data-mml-node="mi"><use data-c="1D434" xlink:href="#MJX-TEX-I-1D434"></use></g><g data-mml-node="mi" transform="translate(783,-150) scale(0.707)"><use data-c="1D45B" xlink:href="#MJX-TEX-I-1D45B"></use></g></g><g data-mml-node="mo" transform="translate(1535,0)"><use data-c="3D" xlink:href="#MJX-TEX-N-3D"></use></g><g data-mml-node="mi" transform="translate(2590.8,0)"><use data-c="1D443" xlink:href="#MJX-TEX-I-1D443"></use></g><g data-mml-node="mstyle" transform="translate(3341.8,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mo" transform="translate(3508.8,0)"><use data-c="28" xlink:href="#MJX-TEX-N-28"></use></g><g data-mml-node="mn" transform="translate(3897.8,0)"><use data-c="31" xlink:href="#MJX-TEX-N-31"></use></g><g data-mml-node="mo" transform="translate(4620,0)"><use data-c="2B" xlink:href="#MJX-TEX-N-2B"></use></g><g data-mml-node="mi" transform="translate(5620.3,0)"><use data-c="1D45F" xlink:href="#MJX-TEX-I-1D45F"></use></g><g data-mml-node="msup" transform="translate(6071.3,0)"><g data-mml-node="mo"><use data-c="29" xlink:href="#MJX-TEX-N-29"></use></g><g data-mml-node="mi" transform="translate(422,413) scale(0.707)"><use data-c="1D45B" xlink:href="#MJX-TEX-I-1D45B"></use></g></g><g data-mml-node="mstyle" transform="translate(6967.5,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mtext" transform="translate(8967.5,0)"><use data-c="76" xlink:href="#MJX-TEX-N-76"></use><use data-c="73" xlink:href="#MJX-TEX-N-73" transform="translate(528,0)"></use></g><g data-mml-node="mstyle" transform="translate(9889.5,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="msub" transform="translate(11889.5,0)"><g data-mml-node="mi"><use data-c="1D434" xlink:href="#MJX-TEX-I-1D434"></use></g><g data-mml-node="mi" transform="translate(783,-150) scale(0.707)"><use data-c="1D45B" xlink:href="#MJX-TEX-I-1D45B"></use></g></g><g data-mml-node="mo" transform="translate(13424.6,0)"><use data-c="3D" xlink:href="#MJX-TEX-N-3D"></use></g><g data-mml-node="mi" transform="translate(14480.3,0)"><use data-c="1D443" xlink:href="#MJX-TEX-I-1D443"></use></g><g data-mml-node="mstyle" transform="translate(15231.3,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mo" transform="translate(15398.3,0)"><use data-c="28" xlink:href="#MJX-TEX-N-28"></use></g><g data-mml-node="mn" transform="translate(15787.3,0)"><use data-c="31" xlink:href="#MJX-TEX-N-31"></use></g><g data-mml-node="mo" transform="translate(16509.6,0)"><use data-c="2B" xlink:href="#MJX-TEX-N-2B"></use></g><g data-mml-node="mi" transform="translate(17509.8,0)"><use data-c="1D45F" xlink:href="#MJX-TEX-I-1D45F"></use></g><g data-mml-node="mstyle" transform="translate(17960.8,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mi" transform="translate(18127.8,0)"><use data-c="1D45B" xlink:href="#MJX-TEX-I-1D45B"></use></g><g data-mml-node="mo" transform="translate(18727.8,0)"><use data-c="29" xlink:href="#MJX-TEX-N-29"></use></g></g></g></svg></mjx-container><div class="cap">слева — сложный процент, справа — простой</div></div>
+  <div class="col" style="gap:22px;margin-top:30px">
+    <p class="thesis" data-f="1">Доход каждого года тоже начинает <em>приносить доход</em>.</p>
+    <p class="thesis" data-f="2">Удвоение при 8% — каждые <em>9 лет</em>.</p>
+    <p class="thesis" data-f="3">За 30 лет это <em>×10</em>, а не ×3,4.</p>
+  </div>
+  <aside class="notes">Тезисы появляются по клику: data-f="1", "2", "3". На слайде только тезисы, объяснения — голосом.</aside>
+</section>
+
+<section class="slide s-split" id="s-calc" data-ch="1">
+  <div class="eyebrow"><b>02</b><span class="dash"></span>Потрогать</div>
+  <h2>Ставка важнее <em>взноса</em></h2>
+  <div class="col">
+    <p class="lead">Удвоить взнос — сдвинуть кривую вверх. Поднять ставку — изменить её наклон.</p>
+    <ul class="ticks">
+      <li data-f="1">4% за 30 лет: ×3,2</li>
+      <li data-f="1">8% за 30 лет: ×10,1</li>
+      <li data-f="1">12% за 30 лет: ×30</li>
+    </ul>
+  </div>
+  <div class="plate">
+    <div class="row">
+      <div class="btns" id="calc-p"><span class="label">взнос</span><button class="on" data-p="100000">100 000</button><button data-p="200000">200 000</button></div>
+      <label class="slider">лет<input type="range" id="calc-n" min="1" max="40" value="30"><output></output></label>
+    </div>
+    <svg class="fig" id="calc" viewBox="0 0 700 430"></svg>
+  </div>
+  <aside class="notes">Виджет живёт прямо на слайде: слайдер и кнопки работают во время доклада. Стрелки на клавиатуре листают слайды, пока фокус не на слайдере.</aside>
+</section>
+
+<section class="slide" data-ch="1" data-steps="3">
+  <div class="eyebrow"><b>02</b><span class="dash"></span>По шагам</div>
+  <h2>Правило 72 <em>на пальцах</em></h2>
+  <svg class="fig" id="steps" viewBox="0 0 1408 520" style="margin-top:10px"></svg>
+  <aside class="notes">Схема меняется по клику: виджет слушает onStep и перерисовывает себя. data-steps="3" задаёт число шагов, если на слайде нет элементов с data-f.</aside>
+</section>
+
+<section class="slide s-big s-center" data-ch="1">
+  <div class="big">×10</div>
+  <p class="lead">столько даёт 8% годовых за 30 лет, если ничего не снимать</p>
+  <aside class="notes">Одна цифра на весь слайд — пауза в докладе.</aside>
+</section>
+
+<section class="slide" data-ch="1">
+  <div class="eyebrow"><b>02</b><span class="dash"></span>Таблица</div>
+  <h2>Сколько лет <em>до удвоения</em></h2>
+  <div class="tablewrap" style="margin-top:20px"><table class="t num">
+    <tr><th>Ставка</th><th>Точно, лет</th><th>Правило 72</th><th>Через 30 лет</th></tr>
+    <tr><td>4%</td><td>17,7</td><td>18</td><td>×3,2</td></tr>
+    <tr class="hlrow"><td>8%</td><td>9,0</td><td>9</td><td>×10,1</td></tr>
+    <tr><td>12%</td><td>6,1</td><td>6</td><td>×30,0</td></tr>
+  </table></div>
+  <aside class="notes">Таблица на слайде — не больше 5 строк и 4 столбцов.</aside>
+</section>
+
+<section class="slide s-quote s-center" data-ch="2">
+  <blockquote>Лучшее время начать было двадцать лет назад. Второе лучшее — сейчас.</blockquote>
+  <cite>Поговорка</cite>
+</section>
+
+<section class="slide" id="s-end" data-ch="2">
+  <div class="eyebrow"><b>03</b><span class="dash"></span>Итог</div>
+  <h2>Три вещи, <em>которые стоит запомнить</em></h2>
+  <div class="grid3 fill" style="margin-top:36px;align-content:center;align-items:start">
+    <div class="card" data-f="1"><span class="tag">время</span><h4>Начать раньше</h4><p>Десять лет при 8% — ещё одно удвоение.</p></div>
+    <div class="card" data-f="2"><span class="tag">ставка</span><h4>Следить за процентом</h4><p>+4 п.п. за 30 лет — втрое больше.</p></div>
+    <div class="card warn" data-f="3"><span class="tag">риск</span><h4>Ставка не бесплатна</h4><p>Высокая доходность — высокий риск.</p></div>
+  </div>
+  <div class="sources push small"><div><a href="https://en.wikipedia.org/wiki/Rule_of_72" target="_blank" rel="noopener">Rule of 72 — Wikipedia</a></div></div>
+</section>
+
+<section class="slide s-title s-center" data-ch="2">
+  <h1>Вопросы?</h1>
+  <p class="lead">Контакты, ссылка на материалы или QR-код.</p>
+</section>
+
+</main>
+<script>
+document.documentElement.lang = "ru";
+window.KIT = {"format":"deck","config":{"title":"Как растут деньги · слайды","description":"Шаблон слайдов explainer-kit: титул, план, тезисы по клику, живой виджет, схема по шагам, большая цифра, таблица, цитата, итог.","lang":"ru","format":"deck","theme":"abyss","author":"Имя Фамилия","chapters":{"0":"Старт","1":"Разбор","2":"Итог"},"draw":true},"theme":{"name":"abyss","scheme":"dark","ambient":{"type":"ocean","stops":[[0,"#2d6a78","#15414e","#08202a",0.55,1],[0.15,"#1d4d5c","#0f3240","#061922",0.4,0.92],[0.4,"#123544","#0a2431","#04121a",0.18,0.8],[0.7,"#0b2430","#061822","#030c12",0.06,0.66],[1,"#06151d","#030d13","#01060a",0,0.55]],"deckDepth":0.2,"rays":7,"snow":true,"glow":"#72d8c6","sprite":"theme/swim.webp","spriteGrid":[4,4],"creatures":4,"swimDeck":false,"vignette":true,"grain":0.06},"fonts":[{"family":"Cormorant","pkg":"cormorant","weights":[400,500,600],"italic":true},{"family":"Golos Text","pkg":"golos-text","weights":[400,500,600]},{"family":"JetBrains Mono","pkg":"jetbrains-mono","weights":[400,500]}]}};
+/* explainer-kit · runtime.js — helpers shared by both formats and by content widgets.
+   build.mjs puts `window.KIT = { format, config, theme }` before this file. */
+const KIT = window.KIT || { format: 'page', config: {}, theme: {} };
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const REDUCED = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+/* Theme colors for SVG. They are CSS variables, so widgets follow the theme and its
+   light/dark switch without redrawing. Legacy names (lamp, bio…) keep old widgets working. */
+const COL = {
+  bg: 'var(--bg)', surface: 'var(--surface)', surface2: 'var(--surface-2)',
+  ink: 'var(--ink)', ink2: 'var(--ink-2)', muted: 'var(--muted)', line: 'var(--line)', line2: 'var(--line-2)',
+  accent: 'var(--accent)', accentInk: 'var(--accent-ink)', accent2: 'var(--accent-2)', warn: 'var(--warn)', extra: 'var(--extra)'
+};
+Object.assign(COL, { lamp: COL.accent, bio: COL.accent2, coral: COL.warn, violet: COL.extra, bone: COL.ink, fog: COL.muted, lineS: COL.line2, cell: COL.surface2 });
+const SERIES = [COL.accent, COL.accent2, COL.warn, COL.extra, COL.ink];
+/* translucent version of any color: mix(COL.accent, 20) */
+const mix = (c, pct, base = 'transparent') => `color-mix(in srgb, ${c} ${pct}%, ${base})`;
+/* a real color string for <canvas>, which cannot read CSS variables */
+function cssColor(c) {
+  const m = /^var\((--[\w-]+)\)$/.exec(c);
+  if (!m) return c;
+  return getComputedStyle(document.documentElement).getPropertyValue(m[1]).trim() || '#888';
+}
+
+/* SVG builder. Paint attributes given as var()/color-mix() go to `style`, where they work everywhere. */
+const PAINT = new Set(['fill', 'stroke', 'stop-color', 'color', 'flood-color']);
+function S(tag, attrs = {}, parent) {
+  const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  let style = '';
+  for (const k in attrs) {
+    const v = attrs[k];
+    if (v === undefined || v === null) continue;
+    if (k === 'style') style += v + ';';
+    else if (PAINT.has(k) && typeof v === 'string' && /^(var|color-mix)\(/.test(v)) style += `${k}:${v};`;
+    else e.setAttribute(k, v);
+  }
+  if (style) e.setAttribute('style', style);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function T(parent, x, y, txt, attrs = {}) { const t = S('text', Object.assign({ x, y, fill: COL.muted, 'font-size': 13 }, attrs), parent); t.textContent = txt; return t; }
+/* HTML builder: H('div', {class: 'card'}, '<b>hi</b>', parent) */
+function H(tag, attrs = {}, html, parent) { const e = document.createElement(tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (html !== undefined) e.innerHTML = html; if (parent) parent.appendChild(e); return e; }
+
+/* a row of toggle buttons: chips(box, btn => …); the clicked one gets .on */
+function chips(box, cb) {
+  if (!box) return;
+  box.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b || !box.contains(b)) return;
+    $$('button', box).forEach(x => x.classList.toggle('on', x === b));
+    cb(b);
+  });
+}
+/* a range input with its <output>: slider('#id', v => label, v => redraw). Returns a getter.
+   The callback fires on input only, so draw once yourself after setting up. */
+function slider(sel, label, cb) {
+  const el = typeof sel === 'string' ? $(sel) : sel; if (!el) return () => 0;
+  const out = el.parentElement.querySelector('output');
+  const upd = (fire = true) => { const v = +el.value; if (out && label) out.textContent = label(v); if (cb && fire) cb(v); };
+  el.addEventListener('input', () => upd()); upd(false);
+  return () => +el.value;
+}
+function rng(seed) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+
+/* numbers in the page language: minus sign, local decimal separator, units */
+const LOCALE = KIT.config.lang || document.documentElement.lang || 'ru';
+const RU = /^ru/.test(LOCALE);
+function fmt(v, d = 0) { const s = Math.abs(v).toLocaleString(LOCALE, { minimumFractionDigits: d, maximumFractionDigits: d }); return (v < 0 ? '−' : '') + s; }
+const ru = (v, d = 2) => fmt(v, d); // legacy name
+function fmtBytes(b) {
+  const U = RU ? ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ'] : ['B', 'KB', 'MB', 'GB', 'TB'];
+  let i = 0; while (b >= 1024 && i < U.length - 1) { b /= 1024; i++; }
+  return (i === 0 ? Math.round(b) : fmt(b, b >= 10 ? 0 : 1)) + ' ' + U[i];
+}
+const fmtTok = n => n >= 1048576 ? fmt(n / 1048576, n % 1048576 ? 1 : 0) + 'M' : n >= 1024 ? Math.round(n / 1024) + 'K' : String(n);
+function sci(v) { if (v === 0) return '0'; const e = Math.floor(Math.log10(Math.abs(v))); const m = v / 10 ** e; const sup = String(e).replace('-', '⁻').replace(/\d/g, d => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]); return fmt(m, 1) + '·10' + sup; }
+
+/* lifecycle that works in both formats:
+   onShow(el, enter, leave) — slide entered / element scrolled into view
+   onStep(el, fn)           — deck: fn(step) on every click; page: fn(Infinity) once, the final state */
+function whenVisible(el, start, stop) {
+  if (!('IntersectionObserver' in window)) { start(); return; }
+  new IntersectionObserver(es => es.forEach(e => (e.isIntersecting ? start() : stop && stop())), { threshold: 0.05 }).observe(el);
+}
+function onShow(el, enter, leave) {
+  const s = KIT.format === 'deck' && el.closest('.slide');
+  if (s) { if (enter) s.addEventListener('slide:enter', enter); if (leave) s.addEventListener('slide:leave', leave); }
+  else whenVisible(el, enter || (() => {}), leave);
+}
+function onStep(el, fn) {
+  const s = KIT.format === 'deck' && el.closest('.slide');
+  if (s) s.addEventListener('slide:step', e => fn(e.detail)); else fn(Infinity);
+}
+/* animation loop that runs only while its element is visible: loop(el, dt => …) */
+function loop(el, fn) {
+  let raf = 0, last = 0;
+  const tick = now => { const dt = Math.min(0.05, (now - last) / 1000 || 0); last = now; fn(dt, now); raf = requestAnimationFrame(tick); };
+  const start = () => { if (raf) return; if (REDUCED) { fn(0, performance.now()); return; } last = performance.now(); raf = requestAnimationFrame(tick); };
+  const stop = () => { cancelAnimationFrame(raf); raf = 0; };
+  onShow(el, start, stop);
+  return { start, stop };
+}
+
+/* ---------- tiny chart helper: axes + lines on linear or log scales ----------
+   chart(svg, { x: {min, max, log, ticks, fmt, title}, y: {…}, box: [l, t, r, b] })
+   returns { X, Y, line(points, attrs), dot(x, y, attrs), vline(x, attrs), g } */
+function chart(svg, o) {
+  svg.innerHTML = '';
+  const [L, Tp, R, B] = o.box || [70, 20, 980, 360];
+  const ax = a => { const f = a.log ? Math.log10 : v => v; return { f, lo: f(a.min), hi: f(a.max) }; };
+  const xa = ax(o.x), ya = ax(o.y);
+  const X = v => L + (xa.f(v) - xa.lo) / (xa.hi - xa.lo) * (R - L);
+  const Y = v => B - (ya.f(clamp(v, o.y.min, o.y.max)) - ya.lo) / (ya.hi - ya.lo) * (B - Tp);
+  const g = S('g', {}, svg);
+  (o.y.ticks || []).forEach(v => { S('line', { x1: L, y1: Y(v), x2: R, y2: Y(v), stroke: COL.line }, g); T(g, L - 10, Y(v) + 4, (o.y.fmt || String)(v), { 'text-anchor': 'end', 'font-size': 12 }); });
+  (o.x.ticks || []).forEach(v => { S('line', { x1: X(v), y1: Tp, x2: X(v), y2: B, stroke: COL.line }, g); T(g, X(v), B + 20, (o.x.fmt || String)(v), { 'text-anchor': 'middle', 'font-size': 12 }); });
+  if (o.x.title) T(g, (L + R) / 2, B + 42, o.x.title, { 'text-anchor': 'middle', 'font-size': 12 });
+  if (o.y.title) T(g, L, Tp - 6, o.y.title, { 'font-size': 12 });
+  return {
+    X, Y, g,
+    line: (pts, a = {}) => S('path', Object.assign({ d: 'M' + pts.map(p => X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join('L'), fill: 'none', stroke: COL.accent, 'stroke-width': 2.5 }, a), g),
+    dot: (x, y, a = {}) => S('circle', Object.assign({ cx: X(x), cy: Y(y), r: 5, fill: COL.accent }, a), g),
+    vline: (x, a = {}) => S('line', Object.assign({ x1: X(x), y1: Tp, x2: X(x), y2: B, stroke: COL.accent, 'stroke-dasharray': '4 4' }, a), g)
+  };
+}
+
+/* inline SVG icons (stroke = currentColor; width/cap come from theme tokens) */
+const ICON = {
+  pen: '<path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/><path d="M14 6l3 3"/>',
+  marker: '<path d="M9 15l-4 5h6l1.5-2"/><path d="M8.5 14.5l7-9 4 3-7 9z"/>',
+  laser: '<circle cx="12" cy="12" r="2.5"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>',
+  eraser: '<path d="M8 20h12"/><path d="M4.5 15.5l9-9a2 2 0 0 1 2.8 0l2.2 2.2a2 2 0 0 1 0 2.8L12 18H7z"/>',
+  undo: '<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
+  trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  left: '<path d="M15 5l-7 7 7 7"/>', right: '<path d="M9 5l7 7-7 7"/>',
+  expand: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>', notes: '<path d="M5 4h14v16H5z"/><path d="M8 9h8M8 13h8M8 17h5"/>'
+};
+const icon = (name, size = 18) => `<svg class="ico" viewBox="0 0 24 24" width="${size}" height="${size}" aria-hidden="true" fill="none" stroke="currentColor" style="stroke-width:var(--icon-stroke,1.7);stroke-linecap:var(--icon-cap,round);stroke-linejoin:round">${ICON[name] || ''}</svg>`;
+
+/* explainer-kit · ambient.js — the backdrop behind the content.
+   Types: "ocean" (water gradient that darkens with depth, light rays, marine snow, sprite
+   creatures), "grid" (blueprint lines), "plain" (just the background). Any type can add
+   "grain" and "vignette". Settings come from theme.json → ambient, overridable in config.json. */
+const Ambient = (() => {
+  const base = KIT.theme.ambient || {};
+  const over = KIT.config.ambient;
+  const A = Object.assign({ type: 'plain' }, base, typeof over === 'object' && over ? over : {});
+  if (typeof over === 'string' && over !== 'theme') A.type = over;
+  const deck = KIT.format === 'deck';
+  let root, water, rays, depth = 0, W = 0, H = 0, run = true;
+  const canv = {}, sharks = [], flakes = [];
+  const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const mixHex = (a, b, t) => { const P = hex(a), Q = hex(b); return `rgb(${P.map((v, i) => Math.round(lerp(v, Q[i], t))).join(',')})`; };
+
+  function layer(cls, tag = 'div') { const e = document.createElement(tag); e.className = cls; root.appendChild(e); return e; }
+  function init() {
+    if (A.type === 'none') return;
+    root = document.createElement('div'); root.id = 'ambient'; root.setAttribute('aria-hidden', 'true');
+    document.body.prepend(root);
+    if (A.type === 'ocean') ocean();
+    if (A.type === 'grid') layer('amb-grid');
+    if (A.vignette) layer('amb-vignette');
+    if (A.grain) { const g = layer('amb-grain amb-fx'); g.style.setProperty('--grain', A.grain); }
+    setDepth(deck ? (A.deckDepth ?? 0.15) : 0);
+  }
+
+  /* ---------- ocean ---------- */
+  function ocean() {
+    water = layer('amb-water');
+    if (A.rays) {
+      rays = layer('amb-rays amb-fx' + (A.sway !== false && !REDUCED && !deck ? ' sway' : ''));
+      const R = rng(7);
+      for (let i = 0; i < A.rays; i++) {
+        const el = document.createElement('i');
+        el.style.left = (8 + i * 13 + R() * 6) + '%'; el.style.setProperty('--r', (-18 + i * 5 + R() * 4) + 'deg');
+        el.style.width = (5 + R() * 8) + '%'; el.style.opacity = (0.35 + R() * 0.5).toFixed(2); el.style.animationDelay = (-R() * 14) + 's';
+        rays.appendChild(el);
+      }
+    }
+    if (A.sprite) { canv.far = layer('amb-far amb-fx', 'canvas'); canv.mid = layer('amb-mid amb-fx', 'canvas'); canv.far.style.filter = 'blur(3.4px)'; canv.mid.style.filter = 'blur(1.4px)'; canv.far.style.opacity = A.farOpacity ?? 0.22; canv.mid.style.opacity = A.midOpacity ?? 0.3; }
+    if (A.snow) canv.snow = layer('amb-snow amb-fx', 'canvas');
+    for (const k in canv) canv[k].ctx = canv[k].getContext('2d');
+    resize(); addEventListener('resize', resize);
+    document.addEventListener('visibilitychange', () => { run = !document.hidden; });
+    if (A.sprite) {
+      const img = new Image();
+      img.onload = () => { A._img = img; A._cw = img.naturalWidth / (A.spriteGrid?.[0] || 4); A._ch = img.naturalHeight / (A.spriteGrid?.[1] || 4); if (!swims()) drawStatic(); };
+      img.src = A.sprite;
+      const n = A.creatures ?? 4; const R = rng(3);
+      for (let i = 0; i < n; i++) { const s = { layer: i < n / 2 ? 'far' : 'mid', R }; spawn(s, true); sharks.push(s); }
+    }
+    if (A.snow) { const n = Math.round(clamp(W * H / 18000, 40, 110)); for (let i = 0; i < n; i++) flakes.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.5 + 0.3, v: 4 + Math.random() * 9, d: Math.random() * 6, glow: !deck && Math.random() < 0.3, p: Math.random() * 6 }); }
+    let last = performance.now();
+    const frame = now => {
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (run) {
+        if (swims()) { const { far, mid } = canv; far.ctx.clearRect(0, 0, W, H); mid.ctx.clearRect(0, 0, W, H); for (const s of sharks) { if (!REDUCED) move(s, dt); draw(s); } }
+        if (canv.snow) snow(dt);
+      }
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+  const swims = () => !!A.sprite && (deck ? !!A.swimDeck : A.swim !== false);
+  function resize() {
+    const d = Math.min(window.devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight;
+    for (const k in canv) { const c = canv[k]; c.width = Math.round(W * d); c.height = Math.round(H * d); c.ctx.setTransform(d, 0, 0, d, 0, 0); }
+    if (A._img && !swims()) drawStatic();
+  }
+  function spawn(s, init) {
+    const R = Math.random;
+    const base = s.layer === 'far' ? 0.18 + R() * 0.12 : 0.3 + R() * 0.16;
+    s.w = base * Math.max(W, 900); s.dir = R() < 0.5 ? -1 : 1;
+    s.speed = (s.layer === 'far' ? 12 : 20) * (0.75 + R() * 0.5) * (s.w / 500);
+    s.y = H * (0.12 + R() * 0.75); s.x = init ? R() * W : (s.dir < 0 ? W + s.w * 0.7 : -s.w * 0.7);
+    s.phase = R() * 16; s.bob = R() * 6; s.fps = 7 + R() * 3; s.tilt = (R() - 0.5) * 0.06;
+  }
+  function move(s, dt) { s.x += s.dir * s.speed * dt; s.phase += s.fps * dt; s.bob += dt * 0.6; if ((s.dir < 0 && s.x < -s.w * 0.75) || (s.dir > 0 && s.x > W + s.w * 0.75)) spawn(s, false); }
+  function draw(s) {
+    if (!A._img) return;
+    const ctx = canv[s.layer].ctx, cols = A.spriteGrid?.[0] || 4, frames = cols * (A.spriteGrid?.[1] || 4);
+    const f = Math.floor(s.phase) % frames, h = s.w * A._ch / A._cw;
+    ctx.save(); ctx.translate(s.x, s.y + Math.sin(s.bob) * 6); ctx.rotate(s.tilt); if (s.dir > 0) ctx.scale(-1, 1);
+    ctx.drawImage(A._img, (f % cols) * A._cw, Math.floor(f / cols) * A._ch, A._cw, A._ch, -s.w / 2, -h / 2, s.w, h); ctx.restore();
+  }
+  function drawStatic() {
+    // still creatures for slides: fixed, calm positions that never cross the middle of the stage
+    const { far, mid } = canv; far.ctx.clearRect(0, 0, W, H); mid.ctx.clearRect(0, 0, W, H);
+    const spots = [{ layer: 'far', x: 0.14, y: 0.16, w: 0.2, dir: 1 }, { layer: 'far', x: 0.6, y: 0.08, w: 0.14, dir: -1 }, { layer: 'mid', x: 0.5, y: 0.86, w: 0.4, dir: -1 }];
+    spots.forEach((p, i) => draw({ layer: p.layer, x: p.x * W, y: p.y * H, w: p.w * Math.max(W, 900), dir: p.dir, phase: i * 5, bob: 0, tilt: p.dir * 0.03 }));
+  }
+  function snow(dt) {
+    const ctx = canv.snow.ctx; ctx.clearRect(0, 0, W, H);
+    for (const f of flakes) {
+      if (!REDUCED) { f.y += f.v * dt * 0.6; f.d += dt * 0.3; f.x += Math.sin(f.d) * 0.15; f.p += dt * 1.4; }
+      if (f.y > H + 4) { f.y = -4; f.x = Math.random() * W; }
+      if (f.glow) { const a = depth * (0.35 + 0.35 * Math.sin(f.p)); if (a > 0.02) { ctx.globalAlpha = a; ctx.fillStyle = A.glow || '#72d8c6'; ctx.beginPath(); ctx.arc(f.x, f.y, f.r + 0.8, 0, 7); ctx.fill(); ctx.globalAlpha = 1; } }
+      else { ctx.fillStyle = `rgba(220,235,230,${(0.16 + 0.18 * (1 - depth)).toFixed(3)})`; ctx.fillRect(f.x, f.y, f.r, f.r); }
+    }
+  }
+
+  /* depth 0…1: page scroll position, or a fixed value for slides */
+  function setDepth(f) {
+    depth = f;
+    if (!water || !A.stops) return;
+    const st = A.stops; let i = 0; while (i < st.length - 2 && f > st[i + 1][0]) i++;
+    const a = st[i], b = st[i + 1], t = clamp((f - a[0]) / (b[0] - a[0]), 0, 1);
+    water.style.background = `linear-gradient(180deg, ${mixHex(a[1], b[1], t)} 0%, ${mixHex(a[2], b[2], t)} 45%, ${mixHex(a[3], b[3], t)} 100%)`;
+    if (rays) rays.style.opacity = lerp(a[4], b[4], t).toFixed(3);
+    const br = lerp(a[5] ?? 1, b[5] ?? 1, t).toFixed(3);
+    if (canv.far) { canv.far.style.filter = `blur(3.4px) brightness(${br})`; canv.mid.style.filter = `blur(1.4px) brightness(${br})`; }
+  }
+  const toggle = () => document.body.classList.toggle('ambient-off');
+  return { init, setDepth, toggle, settings: A };
+})();
+
+/* explainer-kit · deck.js — slides engine.
+   Stage 1600×900 scaled to the window; <section class="slide"> are slides; data-f="n" reveals
+   on click n; data-ch groups slides into chapters for the progress bar; <aside class="notes">
+   holds speaker notes. Events on each slide: slide:enter, slide:leave, slide:step (detail = step). */
+const Deck = (() => {
+  const stage = $('#stage');
+  const slides = $$('.slide', stage);
+  let cur = 0, step = 0, scale = 1;
+  const maxStep = s => { let m = +s.dataset.steps || 0; $$('[data-f]', s).forEach(e => { m = Math.max(m, +e.dataset.f); }); return m; };
+  function fit() { scale = Math.min(innerWidth / 1600, innerHeight / 900); stage.style.transform = `translate(-50%, -50%) scale(${scale})`; }
+  function applyStep(s, n) { $$('[data-f]', s).forEach(e => e.classList.toggle('on', +e.dataset.f <= n)); s.dispatchEvent(new CustomEvent('slide:step', { detail: n })); }
+  function go(i, st = 0, fromNav = true) {
+    i = clamp(i, 0, slides.length - 1);
+    const prev = slides[cur];
+    if (i !== cur || !prev.classList.contains('active')) {
+      prev.classList.remove('active'); prev.dispatchEvent(new CustomEvent('slide:leave'));
+      cur = i; slides[cur].classList.add('active'); slides[cur].dispatchEvent(new CustomEvent('slide:enter'));
+    }
+    step = st === 'end' ? maxStep(slides[cur]) : clamp(st, 0, maxStep(slides[cur]));
+    applyStep(slides[cur], step);
+    UI.update();
+    if (fromNav) { try { history.replaceState(null, '', '#' + (cur + 1)); } catch (e) {} }
+    document.dispatchEvent(new CustomEvent('deck:change', { detail: { index: cur, step } }));
+  }
+  function next() { const s = slides[cur]; if (step < maxStep(s)) { step++; applyStep(s, step); } else if (cur < slides.length - 1) go(cur + 1, 0); }
+  function prev() { if (step > 0) { step--; applyStep(slides[cur], step); } else if (cur > 0) go(cur - 1, 'end'); }
+
+  /* ---------- chrome: bottom bar, notes, help, lightbox ---------- */
+  const UI = (() => {
+    const CH = KIT.config.chapters || {};
+    const ticks = [];
+    function build() {
+      const who = KIT.config.author ? `<span class="who">${KIT.config.author}</span>` : '';
+      stage.insertAdjacentHTML('beforeend', `<div id="bar">${who}<div class="prog" id="prog"><div class="track"></div><div class="done" id="prog-done"></div></div><span class="count" id="count"></span>${KIT.config.draw !== false ? `<button id="b-ink" aria-label="Рисовать (D)" title="Рисовать · D">${icon('pen', 16)}</button>` : ''}<button id="b-prev" aria-label="Назад">${icon('left', 16)}</button><button id="b-next" aria-label="Дальше">${icon('right', 16)}</button></div>`);
+      const keys = [['→ / пробел', 'дальше'], ['←', 'назад'], ['N', 'заметки докладчика'], ['F', 'полный экран'], ['A', 'спрятать фон'], ['D', 'рисовать поверх слайда'], ['Home / End', 'в начало и в конец'], ['?', 'эта справка']];
+      document.body.insertAdjacentHTML('beforeend', `<div id="notes" hidden><span class="label">Заметки</span><div id="notes-text"></div></div><div id="help" hidden><div class="panel">${keys.map(([k, v]) => `<div><kbd>${k}</kbd>${v}</div>`).join('')}</div></div>${$('#lightbox') ? '' : '<div id="lightbox" hidden><img id="lb-img" alt=""></div>'}`);
+      const prog = $('#prog'); let last = null;
+      slides.forEach((s, i) => {
+        const ch = s.dataset.ch;
+        if (ch !== undefined && ch !== last) {
+          last = ch;
+          const t = document.createElement('div'); t.className = 'ch'; t.dataset.ch = ch;
+          t.style.left = (i / Math.max(1, slides.length - 1) * 100) + '%';
+          t.innerHTML = `<span>${CH[ch] ?? ''}</span>`; prog.appendChild(t); ticks.push(t);
+        }
+      });
+    }
+    function update() {
+      const s = slides[cur];
+      $('#count').textContent = String(cur + 1).padStart(2, '0') + ' / ' + slides.length;
+      $('#prog-done').style.width = (cur / Math.max(1, slides.length - 1) * 100) + '%';
+      ticks.forEach(t => t.classList.toggle('on', t.dataset.ch === s.dataset.ch));
+      const n = s.querySelector('.notes'); $('#notes-text').textContent = n ? n.textContent.trim() : '';
+    }
+    return { build, update };
+  })();
+
+  /* ---------- input ---------- */
+  function input() {
+    const isField = el => el && ((el.tagName === 'INPUT' && el.type !== 'range') || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable);
+    document.addEventListener('keydown', e => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+      const k = e.key;
+      if (!$('#help').hidden || !$('#lightbox').hidden) { if (['Escape', ' ', 'Enter'].includes(k)) { $('#help').hidden = true; $('#lightbox').hidden = true; e.preventDefault(); } return; }
+      const onRange = document.activeElement && document.activeElement.type === 'range';
+      if (isField(document.activeElement)) return;
+      if (k === 'PageDown' || (!onRange && (k === 'ArrowRight' || k === 'ArrowDown')) || k === ' ') { e.preventDefault(); if (onRange) document.activeElement.blur(); next(); }
+      else if (k === 'PageUp' || (!onRange && (k === 'ArrowLeft' || k === 'ArrowUp'))) { e.preventDefault(); if (onRange) document.activeElement.blur(); prev(); }
+      else if (k === 'Home') go(0);
+      else if (k === 'End') go(slides.length - 1);
+      else if ('nNтТ'.includes(k)) $('#notes').hidden = !$('#notes').hidden;
+      else if ('fFаА'.includes(k)) fullscreen();
+      else if ('aAфФ'.includes(k)) Ambient.toggle();
+      else if (k === '?' || k === 'h' || k === 'H') $('#help').hidden = false;
+      else if (k === 'Escape') $('#notes').hidden = true;
+    });
+    document.addEventListener('pointerup', () => { const a = document.activeElement; if (a && a.type === 'range') setTimeout(() => a.blur(), 0); });
+    document.addEventListener('click', e => { const b = e.target.closest('button,.chip'); if (b) setTimeout(() => b.blur(), 0); });
+    $('#b-next').addEventListener('click', next); $('#b-prev').addEventListener('click', prev);
+    $('#help').addEventListener('click', () => { $('#help').hidden = true; });
+    $('#lightbox').addEventListener('click', () => { $('#lightbox').hidden = true; });
+    $$('.exhibit', stage).forEach(ex => {
+      ex.tabIndex = 0;
+      const open = () => { const img = ex.querySelector('img'); $('#lb-img').src = img.src; $('#lb-img').alt = img.alt; $('#lightbox').hidden = false; };
+      ex.addEventListener('click', e => { e.stopPropagation(); open(); });
+      ex.addEventListener('keydown', e => { if (e.key === 'Enter') { e.stopPropagation(); open(); } });
+    });
+    $$('[data-go]', stage).forEach(z => {
+      const jump = () => { const i = slides.findIndex(s => s.id === z.dataset.go); if (i >= 0) go(i); };
+      z.addEventListener('click', jump); z.addEventListener('keydown', e => { if (e.key === 'Enter') { e.stopPropagation(); jump(); } });
+    });
+    let sx = null, sy = null;
+    document.addEventListener('touchstart', e => { if (document.body.classList.contains('inking')) return; const t = e.touches[0]; sx = t.clientX; sy = t.clientY; }, { passive: true });
+    document.addEventListener('touchend', e => {
+      if (sx === null) return;
+      const t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && !e.target.closest('input,svg,button')) { dx < 0 ? next() : prev(); }
+      sx = null;
+    }, { passive: true });
+  }
+  function fullscreen() { try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); } catch (e) {} }
+
+  function init() {
+    UI.build(); fit(); addEventListener('resize', fit); input();
+    let start = 0; const h = (location.hash || '').replace('#', '');
+    if (/^\d+$/.test(h)) start = clamp(+h - 1, 0, slides.length - 1);
+    slides.forEach(s => s.classList.remove('active'));
+    cur = start; slides[cur].classList.add('active');
+    go(start, 0, false);
+    slides[cur].dispatchEvent(new CustomEvent('slide:enter'));
+  }
+  return { init, go, next, prev, get cur() { return cur; }, get step() { return step; }, get scale() { return scale; }, slides, stage, maxStep };
+})();
+
+/* explainer-kit · draw.js — draw on top of the page or the slides.
+   A pen button (page: floating, bottom-right; deck: in the bottom bar) or the D key turns
+   drawing on. Tools: pen, marker, laser (fades away), eraser; theme colors; three sizes;
+   undo, clear, hide. On slides every slide keeps its own drawing; on a page strokes are
+   pinned to the document and scroll with it. config.json → "draw": false | true | {persist, colors}. */
+const Ink = (() => {
+  const raw = KIT.config.draw;
+  const cfg = Object.assign({ persist: false, colors: ['--accent', '--accent-2', '--warn', '--ink'] }, typeof raw === 'object' && raw ? raw : {});
+  const deck = KIT.format === 'deck';
+  const TOOLS = [['pen', 'Перо', 'P'], ['marker', 'Маркер', 'M'], ['laser', 'Лазер: исчезает сам', 'L'], ['eraser', 'Ластик', 'E']];
+  const SIZES = deck ? [3, 6, 12] : [2, 4, 8];
+  const LASER_MS = 1400;
+  let on = false, tool = 'pen', color = 0, size = 1, hidden = false;
+  let canvas, ctx, k = 1, bar, fab, cur = null, raf = 0;
+  const layers = {}, history = {}, lasers = [];
+  const key = () => (deck ? 's' + Deck.cur : 'page');
+  const list = () => layers[key()] || (layers[key()] = []);
+  const hist = () => history[key()] || (history[key()] = []);
+  const storeKey = 'ink:' + location.pathname + ':' + document.title;
+
+  function init() {
+    if (raw === false) return;
+    canvas = document.createElement('canvas'); canvas.id = 'ink';
+    (deck ? Deck.stage : document.body).appendChild(canvas);
+    ctx = canvas.getContext('2d');
+    buildBar();
+    if (!deck) { fab = H('button', { class: 'ink-fab', 'aria-label': 'Рисовать на странице (D)', title: 'Рисовать · D' }, icon('pen', 22), document.body); fab.addEventListener('click', () => toggle()); }
+    else { fab = $('#b-ink'); if (fab) fab.addEventListener('click', () => toggle()); }
+    canvas.addEventListener('pointerdown', down); canvas.addEventListener('pointermove', move);
+    canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
+    addEventListener('resize', () => { resize(); render(); });
+    if (!deck) addEventListener('scroll', () => schedule(), { passive: true });
+    document.addEventListener('deck:change', () => render());
+    document.addEventListener('keydown', keys, true);
+    if (cfg.persist) { try { Object.assign(layers, JSON.parse(localStorage.getItem(storeKey) || '{}')); } catch (e) {} }
+    resize(); render();
+  }
+
+  function buildBar() {
+    bar = H('div', { class: 'ink-bar', role: 'toolbar', 'aria-label': 'Рисование' }, '', document.body); bar.hidden = true;
+    const btn = (name, title, fn, cls = '') => { const b = H('button', { type: 'button', title, 'aria-label': title, class: cls }, icon(name), bar); b.addEventListener('click', fn); return b; };
+    TOOLS.forEach(([t, title, hk]) => { const b = btn(t, `${title} · ${hk}`, () => setTool(t)); b.dataset.tool = t; });
+    H('span', { class: 'sep' }, '', bar);
+    cfg.colors.forEach((c, i) => { const b = H('button', { type: 'button', class: 'sw', title: `Цвет ${i + 1}`, 'aria-label': `Цвет ${i + 1}` }, '', bar); b.style.background = `var(${c})`; b.dataset.color = i; b.addEventListener('click', () => setColor(i)); });
+    H('span', { class: 'sep' }, '', bar);
+    SIZES.forEach((s, i) => { const b = H('button', { type: 'button', class: 'sz', title: ['Тонко', 'Средне', 'Толсто'][i], 'aria-label': ['Тонко', 'Средне', 'Толсто'][i] }, `<i style="width:${4 + i * 4}px;height:${4 + i * 4}px"></i>`, bar); b.dataset.size = i; b.addEventListener('click', () => setSize(i)); });
+    H('span', { class: 'sep' }, '', bar);
+    btn('undo', 'Отменить · Ctrl+Z', undo);
+    btn('trash', 'Стереть всё на этом ' + (deck ? 'слайде' : 'экране') + ' · C', clear);
+    btn('eye', 'Скрыть или показать рисунки · H', () => { hidden = !hidden; sync(); render(); }).dataset.act = 'hide';
+    btn('x', 'Закончить рисовать · Esc', () => toggle(false));
+    sync();
+  }
+  function sync() {
+    $$('[data-tool]', bar).forEach(b => b.classList.toggle('on', b.dataset.tool === tool));
+    $$('[data-color]', bar).forEach(b => b.classList.toggle('on', +b.dataset.color === color));
+    $$('[data-size]', bar).forEach(b => b.classList.toggle('on', +b.dataset.size === size));
+    const h = $('[data-act="hide"]', bar); if (h) h.classList.toggle('on', hidden);
+    document.body.classList.toggle('ink-eraser', tool === 'eraser');
+  }
+  const setTool = t => { tool = t; sync(); };
+  const setColor = i => { color = i; if (tool === 'eraser') tool = 'pen'; sync(); };
+  const setSize = i => { size = i; sync(); };
+  function toggle(force) {
+    on = force === undefined ? !on : force;
+    document.body.classList.toggle('inking', on); bar.hidden = !on;
+    if (fab) fab.classList.toggle('on', on);
+    if (on && hidden) { hidden = false; sync(); render(); }
+  }
+
+  function keys(e) {
+    if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) return;
+    const k = e.key.toLowerCase();
+    if ((e.ctrlKey || e.metaKey) && k === 'z' && on) { e.preventDefault(); e.stopPropagation(); undo(); return; }
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    if (k === 'd' || k === 'в') { e.preventDefault(); e.stopPropagation(); toggle(); return; }
+    if (!on) return;
+    const map = { p: 'pen', з: 'pen', m: 'marker', ь: 'marker', l: 'laser', д: 'laser', e: 'eraser', у: 'eraser' };
+    if (map[k]) { setTool(map[k]); e.stopPropagation(); }
+    else if (/^[1-9]$/.test(k) && +k <= cfg.colors.length) { setColor(+k - 1); e.stopPropagation(); }
+    else if (k === 'c' || k === 'с') { clear(); e.stopPropagation(); }
+    else if (k === 'h' || k === 'р') { hidden = !hidden; sync(); render(); e.stopPropagation(); }
+    else if (k === 'escape') { toggle(false); e.stopPropagation(); }
+  }
+
+  /* ---------- coordinates: stage pixels on slides, document pixels (from the center) on a page ---------- */
+  function pos(e) {
+    if (deck) { const r = canvas.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * 1600, (e.clientY - r.top) / r.height * 900]; }
+    return [e.clientX + scrollX - document.documentElement.clientWidth / 2, e.clientY + scrollY];
+  }
+  function down(e) {
+    if (!on) return;
+    e.preventDefault(); canvas.setPointerCapture(e.pointerId);
+    const [x, y] = pos(e);
+    if (tool === 'eraser') { cur = { erase: true }; eraseAt(x, y); return; }
+    const w = SIZES[size] * (tool === 'marker' ? 4 : tool === 'laser' ? 1.5 : 1);
+    cur = { tool, color: cfg.colors[color], w, pen: e.pointerType === 'pen', pts: [[x, y, e.pressure || 0.5]], slide: deck ? Deck.cur : undefined };
+    if (tool === 'laser') lasers.push(cur);
+    schedule();
+  }
+  function move(e) {
+    if (!cur) return;
+    const [x, y] = pos(e);
+    if (cur.erase) { eraseAt(x, y); return; }
+    const p = cur.pts[cur.pts.length - 1];
+    if (Math.hypot(x - p[0], y - p[1]) < 1.2) return;
+    cur.pts.push([x, y, e.pressure || 0.5]);
+    if (cur.tool === 'laser') cur.t = performance.now();
+    schedule();
+  }
+  function up() {
+    if (!cur) return;
+    if (cur.tool === 'laser') cur.t = performance.now();
+    else if (!cur.erase && cur.pts.length) { list().push(cur); hist().push({ type: 'add', s: cur }); save(); }
+    cur = null; schedule();
+  }
+  function eraseAt(x, y) {
+    const r = deck ? 16 : 12, L = list();
+    const gone = L.filter(s => s.pts.some(p => Math.hypot(p[0] - x, p[1] - y) < r + s.w / 2));
+    if (!gone.length) return;
+    layers[key()] = L.filter(s => !gone.includes(s)); hist().push({ type: 'erase', s: gone }); save(); schedule();
+  }
+  function undo() {
+    const a = hist().pop(); if (!a) return;
+    if (a.type === 'add') layers[key()] = list().filter(s => s !== a.s);
+    else if (a.type === 'erase') list().push(...a.s);
+    else if (a.type === 'clear') layers[key()] = a.prev;
+    save(); render();
+  }
+  function clear() { const L = list(); if (!L.length) return; hist().push({ type: 'clear', prev: L.slice() }); layers[key()] = []; save(); render(); }
+  function save() { if (!cfg.persist) return; try { localStorage.setItem(storeKey, JSON.stringify(layers)); } catch (e) {} }
+
+  /* ---------- rendering ---------- */
+  function resize() {
+    const d = window.devicePixelRatio || 1;
+    if (deck) { k = clamp(d * Deck.scale, 1, 2); canvas.width = Math.round(1600 * k); canvas.height = Math.round(900 * k); }
+    else { k = Math.min(d, 2); canvas.width = Math.round(innerWidth * k); canvas.height = Math.round(innerHeight * k); }
+  }
+  function schedule() { if (!raf) raf = requestAnimationFrame(() => { raf = 0; render(); }); }
+  function stroke(s, alpha = 1) {
+    const P = s.pts; if (!P.length) return;
+    ctx.save();
+    ctx.strokeStyle = ctx.fillStyle = cssColor(`var(${s.color})`);
+    ctx.globalAlpha = alpha * (s.tool === 'marker' ? 0.35 : 1);
+    ctx.lineCap = s.tool === 'marker' ? 'butt' : 'round'; ctx.lineJoin = 'round';
+    if (s.tool === 'laser') { ctx.shadowColor = ctx.strokeStyle; ctx.shadowBlur = 14; }
+    if (P.length === 1) { ctx.beginPath(); ctx.arc(P[0][0], P[0][1], s.w / 2, 0, 7); ctx.fill(); ctx.restore(); return; }
+    const width = p => (s.pen ? s.w * (0.4 + p[2] * 1.2) : s.w);
+    if (s.pen) {
+      for (let i = 1; i < P.length; i++) { ctx.lineWidth = width(P[i]); ctx.beginPath(); ctx.moveTo(P[i - 1][0], P[i - 1][1]); ctx.lineTo(P[i][0], P[i][1]); ctx.stroke(); }
+    } else {
+      ctx.lineWidth = s.w; ctx.beginPath(); ctx.moveTo(P[0][0], P[0][1]);
+      for (let i = 1; i < P.length - 1; i++) { const mx = (P[i][0] + P[i + 1][0]) / 2, my = (P[i][1] + P[i + 1][1]) / 2; ctx.quadraticCurveTo(P[i][0], P[i][1], mx, my); }
+      const l = P[P.length - 1]; ctx.lineTo(l[0], l[1]); ctx.stroke();
+    }
+    ctx.restore();
+  }
+  function render() {
+    if (!ctx) return;
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (deck) ctx.setTransform(k, 0, 0, k, 0, 0);
+    else ctx.setTransform(k, 0, 0, k, (-scrollX + document.documentElement.clientWidth / 2) * k, -scrollY * k);
+    if (!hidden) list().forEach(s => stroke(s));
+    if (cur && !cur.erase && cur.tool !== 'laser') stroke(cur);
+    const now = performance.now();
+    for (let i = lasers.length - 1; i >= 0; i--) {
+      const s = lasers[i], age = s === cur || !s.t ? 0 : now - s.t;
+      if (age > LASER_MS) { lasers.splice(i, 1); continue; }
+      if (!deck || s.slide === undefined || s.slide === Deck.cur) stroke(s, 1 - age / LASER_MS);
+    }
+    if (lasers.length) schedule();
+  }
+  return { init, toggle, clear, undo, get on() { return on; }, get count() { return list().length; } };
+})();
+
+/* ---------- content widgets ---------- */
+/* Content widgets for the slides template. Same helpers as on a page; onShow fires when the
+   slide opens, onStep on every click. Colors are theme tokens, so a theme switch needs no code. */
+
+/* ---------- calculator on a slide ---------- */
+(() => {
+  const svg = $('#calc'); if (!svg) return;
+  let P = 100000;
+  const SER = [{ r: 0.04, col: COL.accent2 }, { r: 0.08, col: COL.accent }, { r: 0.12, col: COL.warn }, { r: 0.08, simple: true, col: COL.muted }];
+  const val = (s, n) => s.simple ? P * (1 + s.r * n) : P * (1 + s.r) ** n;
+  const years = slider('#calc-n', v => v + ' лет', draw);
+  chips($('#calc-p'), b => { P = +b.dataset.p; draw(); });
+  function draw() {
+    const N = years ? years() : 30;
+    const c = chart(svg, { box: [90, 20, 640, 380], x: { min: 0, max: 40, ticks: [0, 10, 20, 30, 40], title: 'лет' }, y: { min: 5e4, max: 3e7, log: true, ticks: [1e5, 1e6, 1e7], fmt: v => v >= 1e6 ? fmt(v / 1e6) + ' млн' : fmt(v / 1e3) + ' тыс' } });
+    SER.forEach(s => c.line(Array.from({ length: 41 }, (_, n) => [n, val(s, n)]), { stroke: s.col, 'stroke-dasharray': s.simple ? '5 5' : null, 'stroke-width': 3 }));
+    c.vline(N);
+    SER.forEach(s => { c.dot(N, val(s, N), { fill: s.col, r: 6 }); });
+    T(c.g, c.X(N) + (N > 30 ? -10 : 10), c.Y(val(SER[1], N)) - 12, fmt(val(SER[1], N)), { fill: COL.accent, 'font-size': 16, 'text-anchor': N > 30 ? 'end' : 'start' });
+  }
+  draw();
+})();
+
+/* ---------- step-by-step diagram: rule of 72 ----------
+   Step 0 shows today; every click adds one doubling. On a page (no clicks) onStep gives
+   Infinity, and the diagram shows its final state. */
+(() => {
+  const svg = $('#steps'); if (!svg) return;
+  const base = 440, unit = 19; // 100 000 = 19 px of bar height
+  function draw(step) {
+    svg.innerHTML = '';
+    const defs = S('defs', {}, svg), m = S('marker', { id: 'arr', viewBox: '0 0 10 10', refX: 8, refY: 5, markerWidth: 8, markerHeight: 8, orient: 'auto' }, defs);
+    S('path', { d: 'M0 0L10 5L0 10z', fill: COL.accent2 }, m);
+    S('line', { x1: 0, y1: base + 0.5, x2: 1408, y2: base + 0.5, stroke: COL.line2 }, svg);
+    const last = Math.min(step, 3) + 1;
+    for (let i = 0; i <= last; i++) {
+      const x = 60 + i * 300, h = unit * 2 ** i;
+      S('rect', { x, y: base - h, width: 150, height: h, fill: i === last ? COL.accent : mix(COL.accent, 35), rx: 2 }, svg);
+      T(svg, x + 75, base - h - 14, fmt(100000 * 2 ** i), { 'text-anchor': 'middle', 'font-size': 22, fill: COL.ink });
+      T(svg, x + 75, base + 34, i === 0 ? 'сейчас' : `через ${9 * i} лет`, { 'text-anchor': 'middle', 'font-size': 18, fill: COL.muted });
+      if (i > 0) {
+        S('path', { d: `M${x - 140} ${base - 20} q 60 -60 120 0`, fill: 'none', stroke: COL.accent2, 'stroke-width': 2, 'marker-end': 'url(#arr)' }, svg);
+        T(svg, x - 80, base - 64, '×2', { 'text-anchor': 'middle', 'font-size': 20, fill: COL.accent2 });
+      }
+    }
+    T(svg, 0, 30, last === 4 ? '72 / 8 = 9 лет на каждое удвоение: за 36 лет — ×16' : '72 / ставка в % = лет до удвоения', { 'font-size': 22, fill: COL.ink2 });
+  }
+  onStep(svg, s => draw(s === Infinity ? 3 : s));
+})();
+
+Ambient.init(); Deck.init(); if (typeof Ink !== 'undefined') Ink.init();
+</script>
+</body>
+</html>

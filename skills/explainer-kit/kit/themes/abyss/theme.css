@@ -1,0 +1,27 @@
+/* Theme «abyss»: deep water. Bone-white text on near-black teal, lamp-yellow accent,
+   bioluminescent teal for controls, coral for warnings. Classical display serif (Cormorant)
+   with italic accents, humanist sans for reading (Golos Text), JetBrains Mono for data.
+   Single dark look by design. */
+:root {
+  --bg: #050d12;
+  --surface: rgba(7, 21, 28, 0.72);
+  --surface-2: rgba(11, 29, 37, 0.94);
+  --ink: #ece6d7;
+  --ink-2: rgba(236, 230, 215, 0.82);
+  --muted: #93adae;
+  --line: rgba(150, 182, 184, 0.2);
+  --line-2: rgba(150, 182, 184, 0.45);
+  --accent: #f1c46c;
+  --accent-ink: #1b1407;
+  --accent-2: #72d8c6;
+  --warn: #e8866c;
+  --extra: #c4b5e8;
+  --f-display: "Cormorant", "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --f-body: "Golos Text", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --display-weight: 500; --display-tracking: -0.005em; --em-style: italic; --display-scale: 1;
+  --radius: 2px; --blur: 6px; --icon-stroke: 1.6; --icon-cap: round;
+  --shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+  --ray: rgba(190, 235, 235, 0.3); --vignette: rgba(2, 8, 12, 0.6);
+  color-scheme: dark;
+}

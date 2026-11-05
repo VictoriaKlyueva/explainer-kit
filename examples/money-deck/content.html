@@ -1,0 +1,102 @@
+<!-- Slides template. One <section class="slide"> per slide, laid out in 1600×900 stage pixels.
+     data-ch — chapter for the progress bar (labels in config.json → chapters).
+     data-f="n" — appears on click n. <aside class="notes"> — speaker notes (N key).
+     Slide types: s-title, s-center, s-split, s-big, s-quote; or no type for a free layout. -->
+
+<section class="slide s-title" data-ch="0">
+  <div class="eyebrow"><b>Шаблон</b><span class="dash"></span>Слайды</div>
+  <h1>Как растут <em>деньги</em><span class="sub">и почему через тридцать лет важнее процент, а не сумма взноса</span></h1>
+  <p class="small mono push">→ / пробел — дальше · N — заметки · D — рисовать · ? — все клавиши</p>
+  <aside class="notes">Титул: тема, подзаголовок-тезис, подсказка по клавишам. Заметки видит только докладчик по клавише N.</aside>
+</section>
+
+<section class="slide" id="s-plan" data-ch="0">
+  <div class="eyebrow"><b>План</b></div>
+  <h2>Три вопроса <em>на десять минут</em></h2>
+  <div class="grid3" style="margin-top:40px">
+    <div class="card" data-go="s-formula" tabindex="0"><span class="tag">01</span><h4>Почему кривая загибается</h4><p>Формула и правило 72.</p></div>
+    <div class="card" data-go="s-calc" tabindex="0"><span class="tag">02</span><h4>Что важнее</h4><p>Ставка или сумма взноса.</p></div>
+    <div class="card" data-go="s-end" tabindex="0"><span class="tag">03</span><h4>Что делать</h4><p>Три вывода.</p></div>
+  </div>
+  <p class="small push">Карточки с data-go — ссылки на слайды: по клику переходим сразу туда.</p>
+  <aside class="notes">Весь доклад на одном слайде.</aside>
+</section>
+
+<section class="slide" id="s-formula" data-ch="1">
+  <div class="eyebrow"><b>01</b><span class="dash"></span>Формула</div>
+  <h2>Деньги растут <em>по степени</em></h2>
+  <div class="eq" style="margin-top:24px"><M>A_n = P\,(1+r)^n \qquad\text{vs}\qquad A_n = P\,(1+r\,n)</M><div class="cap">слева — сложный процент, справа — простой</div></div>
+  <div class="col" style="gap:22px;margin-top:30px">
+    <p class="thesis" data-f="1">Доход каждого года тоже начинает <em>приносить доход</em>.</p>
+    <p class="thesis" data-f="2">Удвоение при 8% — каждые <em>9 лет</em>.</p>
+    <p class="thesis" data-f="3">За 30 лет это <em>×10</em>, а не ×3,4.</p>
+  </div>
+  <aside class="notes">Тезисы появляются по клику: data-f="1", "2", "3". На слайде только тезисы, объяснения — голосом.</aside>
+</section>
+
+<section class="slide s-split" id="s-calc" data-ch="1">
+  <div class="eyebrow"><b>02</b><span class="dash"></span>Потрогать</div>
+  <h2>Ставка важнее <em>взноса</em></h2>
+  <div class="col">
+    <p class="lead">Удвоить взнос — сдвинуть кривую вверх. Поднять ставку — изменить её наклон.</p>
+    <ul class="ticks">
+      <li data-f="1">4% за 30 лет: ×3,2</li>
+      <li data-f="1">8% за 30 лет: ×10,1</li>
+      <li data-f="1">12% за 30 лет: ×30</li>
+    </ul>
+  </div>
+  <div class="plate">
+    <div class="row">
+      <div class="btns" id="calc-p"><span class="label">взнос</span><button class="on" data-p="100000">100 000</button><button data-p="200000">200 000</button></div>
+      <label class="slider">лет<input type="range" id="calc-n" min="1" max="40" value="30"><output></output></label>
+    </div>
+    <svg class="fig" id="calc" viewBox="0 0 700 430"></svg>
+  </div>
+  <aside class="notes">Виджет живёт прямо на слайде: слайдер и кнопки работают во время доклада. Стрелки на клавиатуре листают слайды, пока фокус не на слайдере.</aside>
+</section>
+
+<section class="slide" data-ch="1" data-steps="3">
+  <div class="eyebrow"><b>02</b><span class="dash"></span>По шагам</div>
+  <h2>Правило 72 <em>на пальцах</em></h2>
+  <svg class="fig" id="steps" viewBox="0 0 1408 520" style="margin-top:10px"></svg>
+  <aside class="notes">Схема меняется по клику: виджет слушает onStep и перерисовывает себя. data-steps="3" задаёт число шагов, если на слайде нет элементов с data-f.</aside>
+</section>
+
+<section class="slide s-big s-center" data-ch="1">
+  <div class="big">×10</div>
+  <p class="lead">столько даёт 8% годовых за 30 лет, если ничего не снимать</p>
+  <aside class="notes">Одна цифра на весь слайд — пауза в докладе.</aside>
+</section>
+
+<section class="slide" data-ch="1">
+  <div class="eyebrow"><b>02</b><span class="dash"></span>Таблица</div>
+  <h2>Сколько лет <em>до удвоения</em></h2>
+  <div class="tablewrap" style="margin-top:20px"><table class="t num">
+    <tr><th>Ставка</th><th>Точно, лет</th><th>Правило 72</th><th>Через 30 лет</th></tr>
+    <tr><td>4%</td><td>17,7</td><td>18</td><td>×3,2</td></tr>
+    <tr class="hlrow"><td>8%</td><td>9,0</td><td>9</td><td>×10,1</td></tr>
+    <tr><td>12%</td><td>6,1</td><td>6</td><td>×30,0</td></tr>
+  </table></div>
+  <aside class="notes">Таблица на слайде — не больше 5 строк и 4 столбцов.</aside>
+</section>
+
+<section class="slide s-quote s-center" data-ch="2">
+  <blockquote>Лучшее время начать было двадцать лет назад. Второе лучшее — сейчас.</blockquote>
+  <cite>Поговорка</cite>
+</section>
+
+<section class="slide" id="s-end" data-ch="2">
+  <div class="eyebrow"><b>03</b><span class="dash"></span>Итог</div>
+  <h2>Три вещи, <em>которые стоит запомнить</em></h2>
+  <div class="grid3 fill" style="margin-top:36px;align-content:center;align-items:start">
+    <div class="card" data-f="1"><span class="tag">время</span><h4>Начать раньше</h4><p>Десять лет при 8% — ещё одно удвоение.</p></div>
+    <div class="card" data-f="2"><span class="tag">ставка</span><h4>Следить за процентом</h4><p>+4 п.п. за 30 лет — втрое больше.</p></div>
+    <div class="card warn" data-f="3"><span class="tag">риск</span><h4>Ставка не бесплатна</h4><p>Высокая доходность — высокий риск.</p></div>
+  </div>
+  <div class="sources push small"><div><a href="https://en.wikipedia.org/wiki/Rule_of_72" target="_blank" rel="noopener">Rule of 72 — Wikipedia</a></div></div>
+</section>
+
+<section class="slide s-title s-center" data-ch="2">
+  <h1>Вопросы?</h1>
+  <p class="lead">Контакты, ссылка на материалы или QR-код.</p>
+</section>

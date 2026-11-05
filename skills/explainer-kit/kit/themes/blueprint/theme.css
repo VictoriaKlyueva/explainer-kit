@@ -1,0 +1,27 @@
+/* Theme «blueprint»: an engineering drawing. Navy sheet with a measuring grid, signal-yellow
+   accent, cyan controls. Unbounded (wide geometric, no italics, so accents change color only),
+   Commissioner for reading, JetBrains Mono for data. Single dark look by design. */
+:root {
+  --bg: #0b1a2d;
+  --surface: rgba(13, 33, 56, 0.8);
+  --surface-2: rgba(15, 38, 64, 0.95);
+  --ink: #e7eef7;
+  --ink-2: rgba(231, 238, 247, 0.8);
+  --muted: #8fa7c3;
+  --line: rgba(143, 167, 195, 0.2);
+  --line-2: rgba(143, 167, 195, 0.46);
+  --accent: #ffcf5c;
+  --accent-ink: #1a1300;
+  --accent-2: #6fd3ff;
+  --warn: #ff7b5c;
+  --extra: #b9a5ff;
+  --f-display: "Unbounded", "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Commissioner", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --display-weight: 500; --display-tracking: -0.02em; --em-style: normal; --display-scale: 0.72;
+  --radius: 0px; --blur: 4px; --icon-stroke: 1.6; --icon-cap: square;
+  --shadow: 0 0 0 1px rgba(111, 211, 255, 0.15), 0 14px 34px rgba(0, 0, 0, 0.4);
+  --grid-major: rgba(111, 211, 255, 0.09); --grid-minor: rgba(111, 211, 255, 0.035); --grid-cell: 28px;
+  --vignette: rgba(3, 9, 18, 0.7);
+  color-scheme: dark;
+}

@@ -1,0 +1,16 @@
+{
+  "name": "blueprint",
+  "label": "Чертёж",
+  "about": "Инженерный чертёж: синий лист с измерительной сеткой, сигнально-жёлтый акцент. Для технических разборов, архитектуры и железа.",
+  "scheme": "dark",
+  "icon": "grid",
+  "fonts": {
+    "google": "https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600&family=Commissioner:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+    "fontsource": [
+      { "family": "Unbounded", "pkg": "unbounded", "weights": [400, 500, 600] },
+      { "family": "Commissioner", "pkg": "commissioner", "weights": [400, 500, 600] },
+      { "family": "JetBrains Mono", "pkg": "jetbrains-mono", "weights": [400, 500] }
+    ]
+  },
+  "ambient": { "type": "grid", "vignette": true }
+}

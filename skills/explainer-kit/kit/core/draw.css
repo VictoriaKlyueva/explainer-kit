@@ -1,0 +1,18 @@
+/* explainer-kit · draw.css — drawing layer, its toolbar and the pen button */
+#ink { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 40; pointer-events: none; }
+#stage #ink { position: absolute; inset: 0; width: 1600px; height: 900px; z-index: 15; }
+body.inking #ink { pointer-events: auto; touch-action: none; cursor: crosshair; }
+body.inking.ink-eraser #ink { cursor: cell; }
+.ink-fab { position: fixed; right: calc(18px + env(safe-area-inset-right, 0px)); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 45; width: 48px; height: 48px; padding: 0; border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: color-mix(in srgb, var(--bg) 88%, var(--ink) 12%); border: 1px solid var(--line-2); box-shadow: 0 8px 24px color-mix(in srgb, var(--bg) 60%, transparent); }
+.ink-fab:hover { color: var(--accent); border-color: var(--accent); background: color-mix(in srgb, var(--bg) 82%, var(--accent) 18%); }
+.ink-fab.on, #b-ink.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.ink-bar { position: fixed; top: calc(12px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%); z-index: 46; display: flex; gap: 4px; align-items: center; padding: 6px 8px; max-width: calc(100vw - 24px); overflow-x: auto; background: color-mix(in srgb, var(--bg) 90%, var(--ink) 10%); border: 1px solid var(--line-2); border-radius: calc(var(--radius) + 8px); box-shadow: 0 10px 30px color-mix(in srgb, var(--bg) 55%, transparent); }
+.ink-bar button { flex: none; padding: 7px; display: grid; place-items: center; color: var(--ink-2); background: transparent; border: 1px solid transparent; border-radius: calc(var(--radius) + 4px); }
+.ink-bar button:hover { color: var(--ink); background: color-mix(in srgb, var(--ink) 8%, transparent); }
+.ink-bar button.on { color: var(--accent); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 60%, transparent); }
+.ink-bar .sep { flex: none; width: 1px; height: 22px; background: var(--line-2); margin: 0 3px; }
+.ink-bar .sw { width: 22px; height: 22px; padding: 0; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--bg) 70%, transparent); }
+.ink-bar .sw.on { border-color: var(--ink); background-clip: padding-box; box-shadow: 0 0 0 2px var(--bg) inset; }
+.ink-bar .sz { width: 32px; height: 32px; }
+.ink-bar .sz i { display: block; border-radius: 50%; background: currentColor; }
+@media print { #ink, .ink-fab, .ink-bar { display: none !important; } }

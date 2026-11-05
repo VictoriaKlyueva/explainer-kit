@@ -1,0 +1,63 @@
+<!-- Long-read template. Every section below is also a working example of one component.
+     Replace the text, keep the structure: hero → numbered sections → sources.
+     A section enters the table of contents through data-title. -->
+<header class="hero" id="top">
+  <div class="eyebrow"><b>Шаблон</b><span class="dash"></span>Лонгрид<span class="dash"></span>Математика, которую можно потрогать</div>
+  <h1>Как растут деньги<span class="sub">и почему через тридцать лет важнее процент, а не сумма взноса</span></h1>
+  <p class="lead">Лонгрид начинается с тезиса и живой схемы, которая видна сразу, без прокрутки. Здесь тезис такой: при сложном проценте доход каждого года тоже начинает приносить доход, поэтому кривая загибается вверх, а простой процент растёт по прямой.</p>
+  <div class="plate">
+    <div class="ph"><h4>Простой и сложный процент</h4><span class="label" id="hero-year">год 0</span></div>
+    <svg class="fig" id="hero" viewBox="0 0 1000 280"></svg>
+    <p class="note">100 000 под 8% годовых. Каждая точка — один год. Схема показывает главный тезис страницы ещё до того, как кто-то начал читать.</p>
+  </div>
+</header>
+
+<section class="sec" id="s1" data-title="Формула и таблица">
+  <div class="head"><span class="eyebrow"><b>01</b><span class="dash"></span>Формула</span><h2>Деньги растут <em>по степени</em></h2></div>
+  <div class="prose">
+    <p>Если каждый год доход прибавляется к вкладу, через <m>n</m> лет сумма равна</p>
+    <div class="eq"><M>A_n = P\,(1+r)^n</M><div class="cap">P — начальная сумма · r — ставка за год · n — число лет</div></div>
+    <p>У простого процента доход каждый год одинаковый: <m>A_n = P\,(1 + r\,n)</m>. Разница растёт со временем, потому что степень обгоняет любую прямую.</p>
+  </div>
+  <div class="tablewrap"><table class="t num">
+    <tr><th>Ставка</th><th>Удвоение, лет</th><th>Правило 72</th><th>Через 30 лет</th></tr>
+    <tr><td>4%</td><td>17,7</td><td>18</td><td>×3,2</td></tr>
+    <tr class="hlrow"><td>8%</td><td>9,0</td><td>9</td><td>×10,1</td></tr>
+    <tr><td>12%</td><td>6,1</td><td>6</td><td>×30,0</td></tr>
+  </table></div>
+  <div class="prose"><p class="small">Строка с подсветкой — та, что на схеме выше. Правило 72: срок удвоения примерно равен 72, делённому на ставку в процентах.</p></div>
+</section>
+
+<section class="sec" id="s2" data-title="Калькулятор">
+  <div class="head"><span class="eyebrow"><b>02</b><span class="dash"></span>Потрогать</span><h2>Ставка важнее <em>взноса</em></h2></div>
+  <div class="prose"><p>Один виджет на одну мысль. Здесь мысль такая: удвоить взнос — это сдвинуть кривую вверх, а поднять ставку — изменить её наклон.</p></div>
+  <div class="plate">
+    <div class="ph"><h4>Калькулятор вклада</h4><span class="label">логарифмическая шкала</span></div>
+    <div class="row">
+      <div class="btns" id="calc-p"><span class="label">взнос</span><button class="on" data-p="100000">100 000</button><button data-p="200000">200 000</button></div>
+      <label class="slider">срок, лет<input type="range" id="calc-n" min="1" max="40" value="30"><output></output></label>
+    </div>
+    <svg class="fig" id="calc" viewBox="0 0 1000 400"></svg>
+    <div id="calc-legend" class="grid2" style="gap:6px 24px"></div>
+    <p class="note">Подписи у линий и легенда показывают значение в выбранный год. Оценки и допущения всегда пишутся здесь, в примечании.</p>
+  </div>
+</section>
+
+<section class="sec" id="s3" data-title="Карточки и выводы">
+  <div class="head"><span class="eyebrow"><b>03</b><span class="dash"></span>Итог</span><h2>Три вещи, <em>которые стоит запомнить</em></h2></div>
+  <div class="grid3">
+    <div class="card"><span class="y">время</span><h4>Начать раньше</h4><p>Лишние десять лет при 8% — это ещё одно удвоение с хвостиком.</p></div>
+    <div class="card"><span class="y">ставка</span><h4>Следить за процентом</h4><p>Разница в 4 процентных пункта за 30 лет даёт втрое больший итог.</p></div>
+    <div class="card warn"><span class="y">риск</span><h4>Ставка не бывает бесплатной</h4><p>Высокая доходность обычно означает и высокий риск. Это расчёт, а не совет.</p></div>
+  </div>
+  <div class="callout"><p><b>Блок-врезка.</b> Нужен для одной оговорки или неожиданного факта. Если врезок на странице больше двух, это уже не врезки.</p></div>
+  <div class="prose"><p class="kicker">Кикер — последняя фраза раздела, которую читатель унесёт с собой.</p></div>
+</section>
+
+<section class="sec" id="s4" data-title="Источники">
+  <div class="head"><span class="eyebrow"><b>04</b><span class="dash"></span>Что читать</span><h2>Источники</h2></div>
+  <div class="sources">
+    <div><a href="https://en.wikipedia.org/wiki/Compound_interest" target="_blank" rel="noopener">Compound interest — Wikipedia</a></div>
+    <div><a href="https://en.wikipedia.org/wiki/Rule_of_72" target="_blank" rel="noopener">Rule of 72 — Wikipedia</a></div>
+  </div>
+</section>

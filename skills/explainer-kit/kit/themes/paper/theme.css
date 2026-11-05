@@ -1,0 +1,44 @@
+/* Theme «paper»: a quiet reading desk. Grey-green paper, ink-blue accent, teal controls,
+   rust for warnings. Literata (a book serif made for screens) with italic accents, Onest for
+   reading, IBM Plex Mono for data. Light by default with a matching dark (night) variant. */
+:root {
+  --bg: #f2f3ee;
+  --surface: #ffffff;
+  --surface-2: #fafaf6;
+  --ink: #1a1f1c;
+  --ink-2: #3b443f;
+  --muted: #67716c;
+  --line: rgba(26, 31, 28, 0.12);
+  --line-2: rgba(26, 31, 28, 0.3);
+  --accent: #2340a8;
+  --accent-ink: #ffffff;
+  --accent-2: #0d7a69;
+  --warn: #c2410c;
+  --extra: #8a5cc2;
+  --f-display: "Literata", "Georgia", "Times New Roman", serif;
+  --f-body: "Onest", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --display-weight: 500; --display-tracking: -0.012em; --em-style: italic; --display-scale: 0.86;
+  --radius: 6px; --blur: 0px; --icon-stroke: 1.7; --icon-cap: round;
+  --shadow: 0 12px 30px rgba(20, 30, 25, 0.12);
+  --vignette: rgba(0, 0, 0, 0);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121614; --surface: #1a1f1c; --surface-2: #1f2522;
+    --ink: #e9ece6; --ink-2: #c3cac3; --muted: #8f9993;
+    --line: rgba(233, 236, 230, 0.12); --line-2: rgba(233, 236, 230, 0.3);
+    --accent: #93abff; --accent-ink: #0d1430; --accent-2: #4fd1b5; --warn: #ff8a5c; --extra: #c4a3f0;
+    --shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121614; --surface: #1a1f1c; --surface-2: #1f2522;
+  --ink: #e9ece6; --ink-2: #c3cac3; --muted: #8f9993;
+  --line: rgba(233, 236, 230, 0.12); --line-2: rgba(233, 236, 230, 0.3);
+  --accent: #93abff; --accent-ink: #0d1430; --accent-2: #4fd1b5; --warn: #ff8a5c; --extra: #c4a3f0;
+  --shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
+}

@@ -1,0 +1,5 @@
+node_modules/
+**/dist/shots/
+.preview.html
+.kit/
+.DS_Store

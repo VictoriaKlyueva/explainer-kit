@@ -1,0 +1,10 @@
+{
+  "title": "Сжатое внимание DeepSeek",
+  "description": "Интерактивный разбор Compressed Sparse Attention и Heavily Compressed Attention из DeepSeek V4 и их отличий от SSM.",
+  "lang": "ru",
+  "format": "page",
+  "theme": "abyss",
+  "brand": "Сжатое <em>внимание</em>",
+  "toc": true,
+  "draw": true
+}

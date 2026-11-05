@@ -1,0 +1,43 @@
+/* explainer-kit · page.css — long-read format.
+   Layout: a sticky table of contents on the left, a narrow prose column (≤760px)
+   and wide interactive plates; sections numbered by build order. */
+
+:root {
+  --fs-body: 18px; --fs-lead: 22px; --fs-small: 15px; --fs-label: 12px; --fs-ui: 13.5px;
+  --fs-h1: clamp(48px, 7vw, 96px); --fs-h2: clamp(34px, 4.2vw, 54px); --fs-h3: clamp(24px, 2.6vw, 32px); --fs-h4: 24px; --fs-kicker: 27px;
+}
+html { scroll-behavior: smooth; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+#progress { position: fixed; top: env(safe-area-inset-top, 0px); left: 0; height: 2px; background: var(--accent); z-index: 31; width: 0; }
+
+.wrap { position: relative; z-index: 10; display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 48px; max-width: 1440px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap.no-toc { grid-template-columns: minmax(0, 1fr); max-width: 1180px; }
+nav.toc { position: sticky; top: env(safe-area-inset-top, 0px); align-self: start; height: 100vh; overflow-y: auto; padding-block: 36px 24px; }
+nav.toc .brand { font-family: var(--f-display); font-size: 26px; line-height: 1.1; margin-bottom: 18px; color: var(--ink); }
+nav.toc .brand em { color: var(--accent); font-style: var(--em-style, italic); }
+nav.toc a { display: grid; grid-template-columns: 30px 1fr; gap: 4px; padding: 5px 0 5px 10px; border-left: 1px solid var(--line); color: var(--muted); text-decoration: none; font-size: 14px; line-height: 1.35; transition: color 0.2s, border-color 0.2s; }
+nav.toc a span { font-family: var(--f-mono); font-size: 11px; padding-top: 2px; opacity: 0.7; }
+nav.toc a:hover { color: var(--ink); }
+nav.toc a.on { color: var(--accent); border-left-color: var(--accent); }
+main#main { min-width: 0; padding-block: 24px 120px; }
+
+.hero { padding-block: 56px 40px; display: flex; flex-direction: column; gap: 26px; }
+section.sec { padding-block: 72px 24px; display: flex; flex-direction: column; gap: 26px; scroll-margin-top: 20px; }
+section.sec > .head { display: flex; flex-direction: column; gap: 12px; }
+
+/* deck-only markup degrades gracefully when content is shared between formats */
+.notes { display: none !important; }
+[data-f] { opacity: 1; }
+
+@media (max-width: 1180px) { .wrap { grid-template-columns: minmax(0, 1fr); } nav.toc { display: none; } }
+@media (max-width: 860px) { .grid2, .grid3 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) {
+  body { font-size: 17px; } :root { --fs-body: 17px; --fs-lead: 19px; }
+  .sources { columns: 1; }
+  .figscroll > svg { min-width: 720px; }
+}
+@media (max-width: 640px) {
+  .plate .ph .label { white-space: normal; }
+  .tablewrap table.t { min-width: 600px; }
+  table.t td:first-child { white-space: normal; min-width: 120px; }
+}

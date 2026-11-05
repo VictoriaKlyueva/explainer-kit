@@ -1,0 +1,35 @@
+{
+  "name": "abyss",
+  "label": "Бездна",
+  "about": "Тёмная вода, костяной текст, жёлтый фонарь и бирюзовая биолюминесценция. Акулы плавают на фоне, вода темнеет по мере чтения.",
+  "scheme": "dark",
+  "icon": "wave",
+  "fonts": {
+    "google": "https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap",
+    "fontsource": [
+      { "family": "Cormorant", "pkg": "cormorant", "weights": [400, 500, 600], "italic": true },
+      { "family": "Golos Text", "pkg": "golos-text", "weights": [400, 500, 600] },
+      { "family": "JetBrains Mono", "pkg": "jetbrains-mono", "weights": [400, 500] }
+    ]
+  },
+  "ambient": {
+    "type": "ocean",
+    "stops": [
+      [0, "#2d6a78", "#15414e", "#08202a", 0.55, 1.0],
+      [0.15, "#1d4d5c", "#0f3240", "#061922", 0.4, 0.92],
+      [0.4, "#123544", "#0a2431", "#04121a", 0.18, 0.8],
+      [0.7, "#0b2430", "#061822", "#030c12", 0.06, 0.66],
+      [1, "#06151d", "#030d13", "#01060a", 0.0, 0.55]
+    ],
+    "deckDepth": 0.2,
+    "rays": 7,
+    "snow": true,
+    "glow": "#72d8c6",
+    "sprite": "assets/swim.webp",
+    "spriteGrid": [4, 4],
+    "creatures": 4,
+    "swimDeck": false,
+    "vignette": true,
+    "grain": 0.06
+  }
+}

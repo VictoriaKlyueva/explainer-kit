@@ -1,0 +1,16 @@
+{
+  "name": "paper",
+  "label": "Бумага",
+  "about": "Светлый рабочий стол: серо-зелёная бумага, чернильно-синий акцент. Для отчётов, разборов и всего, что читают днём. Есть ночной вариант.",
+  "scheme": "auto",
+  "icon": "book",
+  "fonts": {
+    "google": "https://fonts.googleapis.com/css2?family=Literata:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Onest:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap",
+    "fontsource": [
+      { "family": "Literata", "pkg": "literata", "weights": [400, 500, 600], "italic": true },
+      { "family": "Onest", "pkg": "onest", "weights": [400, 500, 600] },
+      { "family": "IBM Plex Mono", "pkg": "ibm-plex-mono", "weights": [400, 500] }
+    ]
+  },
+  "ambient": { "type": "plain", "grain": 0.035 }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "explainer-kit",
+  "version": "1.0.0",
+  "description": "Интерактивные объяснялки одним HTML-файлом: лонгрид или слайды, темы оформления, живые виджеты, формулы и рисование поверх страницы.",
+  "author": { "name": "Вика" },
+  "license": "MIT",
+  "keywords": ["html", "slides", "explainer", "longread", "interactive", "presentation"]
+}
